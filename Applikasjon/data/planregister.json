@@ -1,0 +1,11 @@
+{
+  "syntetisk": true,
+  "planer": [
+    {
+      "id": "8888/2019001",
+      "navn": "Reguleringsplan for Solbakken boligområde",
+      "fil": "reguleringsplan.md",
+      "plankart": "plankart.png"
+    }
+  ]
+}

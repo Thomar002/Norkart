@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Start · Saksassistent Hvileskjær</title>
+  <link rel="stylesheet" href="/stil.css">
+</head>
+<body>
+  <header class="topp">
+    <div class="merke">
+      <svg viewBox="0 0 40 40" class="vapen" aria-hidden="true">
+        <path d="M6 4h28v16c0 9-6.5 14-14 17C12.5 34 6 29 6 20z" fill="#0f766e"/>
+        <path d="M11 22c3-3 6-3 9 0s6 3 9 0" stroke="#99f6e4" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M11 28c3-3 6-3 9 0s6 3 9 0" stroke="#5eead4" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="20" cy="13" r="4" fill="#fde68a"/>
+      </svg>
+      <div>
+        <div class="kommune">Hvileskjær kommune</div>
+        <div class="undertittel">Saksassistent for byggesak · syntetisk demo</div>
+      </div>
+    </div>
+    <div class="styring">
+      <label class="velg">Sak <select id="velg"></select></label>
+      <label class="velg" title="Effort-nivå for claude-haiku-5-5. På xhigh og max tenker modellen før den svarer, så første punkt kommer senere.">Effort
+        <select id="effort">
+          <option value="low">low</option>
+          <option value="medium">medium</option>
+          <option value="high" selected>high</option>
+          <option value="xhigh">xhigh · tenker</option>
+          <option value="max">max · tenker</option>
+        </select>
+      </label>
+      <label class="velg" title="Ett kall går gjennom hele kontrollisten. Parallelt deler kontrollisten i kall på høyst fire punkter som kjøres samtidig. Med kode henter agenten fakta, og koden avgjør gruppe B, D13 og E5.">Kjøring
+        <select id="kjoring">
+          <option value="sekvensiell" selected>Ett kall</option>
+          <option value="parallell">Parallelt</option>
+          <option value="parallell-kode">Parallelt + kode</option>
+        </select>
+      </label>
+      <label class="bryter" title="Kontrollen avbrytes ved første punkt som gjør at søknaden ikke kan godkjennes">
+        <input type="checkbox" id="stopp" checked> <span>Stopp ved første feil</span>
+      </label>
+      <button id="kjor" class="hoved">▶ Kjør kontroll</button>
+      <button id="valider" class="sekundar" disabled>✓ Valider mot fasit</button>
+      <span class="opptak">
+        <button id="spill" class="sekundar" title="Spill av forrige kjøring av denne saken uten å kalle modellen">↻ Spill av forrige</button>
+        <select id="fart" title="Avspillingsfart">
+          <option value="1">1×</option>
+          <option value="3" selected>3×</option>
+          <option value="10">10×</option>
+        </select>
+      </span>
+    </div>
+  </header>
+
+  <main>
+    <section class="scene kort" id="scene">
+      <svg class="ledninger" id="ledninger" aria-hidden="true"></svg>
+      <div class="aktor person" id="person" role="button" tabindex="0"></div>
+      <div class="dokumentbunke" id="bunke"></div>
+      <div class="aktor kommunen" id="postmottak" role="button" tabindex="0"></div>
+      <div class="aktor agent" id="agent" role="button" tabindex="0">
+      </div>
+      <div class="stempelfelt" id="stempelfelt"></div>
+    </section>
+
+    <section class="kort" id="valideringskort" hidden>
+      <div class="korthode">
+        <h2>Validering mot fasit</h2>
+        <span class="hint">Agenten har aldri sett fasiten. Den vises først etter at kjøringen er ferdig.</span>
+      </div>
+      <div id="validering"></div>
+    </section>
+
+    <div class="rutenett">
+      <div class="venstre">
+        <section class="kort">
+          <div class="korthode">
+            <h2>Kart over Solbakken</h2>
+            <div class="forklaring" id="kartforklaring"></div>
+          </div>
+          <div id="kart" class="kart"></div>
+          <p class="hint" id="karthint">Klikk på en eiendom for å se hva matrikkelen sier om den.</p>
+        </section>
+        <section class="kort">
+          <div class="korthode"><h2>Eiendomsopplysninger</h2><span class="hint">Søknaden mot matrikkelen</span></div>
+          <div id="opplysninger"></div>
+        </section>
+      </div>
+      <section class="kort hoyre" id="gjennomgangKort">
+        <div class="korthode">
+          <div class="paneltittel">
+            <h2>Gjennomgang</h2>
+            <span class="teller" id="teller"></span>
+          </div>
+          <button class="panelknapp" id="utvidGjennomgang" type="button" aria-expanded="false">⛶ Utvid</button>
+        </div>
+        <div class="fremdrift"><div class="fremdriftsstolpe" id="fremdrift"></div></div>
+        <div id="banner"></div>
+        <div id="gjennomgang" class="gjennomgang"></div>
+      </section>
+    </div>
+
+    <section class="kort" id="loggKort">
+      <div class="korthode">
+        <h2>Logg</h2>
+        <div class="panelverktoy">
+          <span class="hint" id="statuslinje"></span>
+          <button class="panelknapp" id="utvidLogg" type="button" aria-expanded="false">⛶ Utvid</button>
+        </div>
+      </div>
+      <ol id="logg" class="logg"></ol>
+    </section>
+  </main>
+
+  <aside class="skuff" id="skuff" aria-hidden="true">
+    <button class="lukk" id="lukk" aria-label="Lukk">×</button>
+    <div id="skuffinnhold"></div>
+  </aside>
+  <div class="skygge" id="skygge"></div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

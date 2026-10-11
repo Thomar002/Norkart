@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 320" width="520" height="320" font-family="sans-serif" font-size="13">
+  <!-- Søkers skisse, sak 2026/202. Bevisst mangelfull: ingen målestokk, ingen nordpil, ingen eiendomsbetegnelse. -->
+  <rect x="0" y="0" width="520" height="320" fill="#ffffff"/>
+  <path d="M10,40 C140,36 380,44 510,38" fill="none" stroke="#6b7280" stroke-width="2"/>
+  <text x="260" y="28" text-anchor="middle" fill="#374151">veien</text>
+  <path d="M40,60 L470,64 L474,280 L44,276 Z" fill="none" stroke="#111827" stroke-width="2"/>
+  <path d="M140,150 L300,152 L298,240 L138,238 Z" fill="#e5e7eb" stroke="#111827" stroke-width="1.5"/>
+  <text x="220" y="200" text-anchor="middle">huset</text>
+  <path d="M380,90 L440,92 L438,150 L378,148 Z" fill="#fde68a" stroke="#111827" stroke-width="2"/>
+  <text x="409" y="118" text-anchor="middle" font-size="12">garasje</text>
+  <text x="409" y="134" text-anchor="middle" font-size="12">6x6</text>
+  <path d="M440,120 L470,121" stroke="#111827"/>
+  <text x="452" y="112" font-size="11">ca 2 m</text>
+  <path d="M410,90 L410,40" stroke="#111827"/>
+  <text x="416" y="70" font-size="11">ca 5 m</text>
+  <text x="60" y="305" fill="#6b7280">Skisse – Hilde</text>
+</svg>

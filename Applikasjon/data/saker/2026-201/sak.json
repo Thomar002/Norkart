@@ -1,0 +1,16 @@
+{
+  "sakId": "2026/201",
+  "mottatt": "2026-10-05",
+  "kanal": "E-post til postmottak",
+  "avsender": "Knut Solberg <knut.solberg@example.no>",
+  "emne": "Byggesøknad – tilbygg Solbakken 7",
+  "dokumenter": [
+    { "id": "DOK-0001", "tittel": "Søknadsskjema", "fil": "soknadsskjema.md" },
+    { "id": "DOK-0002", "tittel": "Situasjonsplan (D-1)", "fil": "situasjonsplan.png" },
+    { "id": "DOK-0003", "tittel": "Plantegning 1. etasje (E-1)", "fil": "plan-1-etasje.png" },
+    { "id": "DOK-0004", "tittel": "Snitt A–A (E-2)", "fil": "snitt-a-a.png" },
+    { "id": "DOK-0005", "tittel": "Fasader nord, øst og vest (E-3)", "fil": "fasader.png" },
+    { "id": "DOK-0006", "tittel": "Opplysninger gitt i nabovarsel (C-1)", "fil": "nabovarsel.md" },
+    { "id": "DOK-0007", "tittel": "Kvittering for nabovarsel (C-2)", "fil": "kvittering-nabovarsel.md" }
+  ]
+}

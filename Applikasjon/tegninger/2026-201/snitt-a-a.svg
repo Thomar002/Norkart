@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 580" width="640" height="580" font-family="sans-serif" font-size="12">
+  <!-- Snitt A–A, sak 2026/201, sett mot øst (nord til venstre). Illustrasjon. 1 m = 30 px (M 1:100).
+       Terreng y = 420 (kote +24,0). Tilbygg x 120–240 (4 m), enebolig x 240–480 (8 m).
+       Tilbygg: møne 5,2 m, gesims 2,8 m, møne nord–sør (snittet går langs mønet).
+       Enebolig: møne 6,5 m, gesims 3,0 m, takvinkel 41°. Golv +24,3. Fri høyde 2,4 m. -->
+  <rect x="0" y="0" width="640" height="580" fill="#ffffff"/>
+
+  <!-- Bygningskropp -->
+  <polygon points="120,420 120,264 240,264 240,420" fill="#fde68a"/>
+  <polygon points="240,420 240,330 315,264 360,225 480,330 480,420" fill="#e5e7eb"/>
+  <polygon points="240,264 315,264 240,330" fill="#fde68a"/>
+  <polyline points="120,420 120,264 315,264 360,225 480,330 480,420" fill="none" stroke="#111827" stroke-width="5"/>
+  <line x1="240" y1="420" x2="240" y2="330" stroke="#111827" stroke-width="5"/>
+  <line x1="240" y1="330" x2="360" y2="225" stroke="#111827" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+  <!-- Golv og himling -->
+  <line x1="120" y1="411" x2="480" y2="411" stroke="#111827" stroke-width="3"/>
+  <line x1="120" y1="339" x2="480" y2="339" stroke="#111827" stroke-width="1.5"/>
+
+  <!-- Terreng: eksisterende (stiplet) og ferdig planert (heltrukken) faller sammen -->
+  <line x1="20" y1="420" x2="620" y2="420" stroke="#111827" stroke-width="2"/>
+  <line x1="20" y1="424" x2="620" y2="424" stroke="#6b7280" stroke-width="1" stroke-dasharray="6 4"/>
+
+  <!-- Romnavn -->
+  <text x="200" y="400" text-anchor="middle" font-size="10">Soverom 2</text>
+  <text x="300" y="380" text-anchor="middle" font-size="11">Soverom 1</text>
+  <text x="420" y="380" text-anchor="middle" font-size="11">Bad</text>
+
+  <!-- Høydemål fra gjennomsnittlig ferdig planert terreng -->
+  <g stroke="#111827" fill="none">
+    <line x1="80" y1="420" x2="80" y2="264"/><line x1="75" y1="264" x2="85" y2="264"/><line x1="75" y1="420" x2="85" y2="420"/>
+    <line x1="565" y1="420" x2="565" y2="225"/><line x1="560" y1="225" x2="570" y2="225"/><line x1="560" y1="420" x2="570" y2="420"/>
+    <line x1="500" y1="420" x2="500" y2="330"/><line x1="495" y1="330" x2="505" y2="330"/><line x1="495" y1="420" x2="505" y2="420"/>
+    <line x1="150" y1="411" x2="150" y2="339"/><line x1="145" y1="339" x2="155" y2="339"/><line x1="145" y1="411" x2="155" y2="411"/>
+    <line x1="360" y1="225" x2="570" y2="225" stroke-dasharray="2 3"/>
+    <line x1="480" y1="330" x2="505" y2="330" stroke-dasharray="2 3"/>
+  </g>
+  <text x="74" y="340" text-anchor="end" font-size="11">Møne</text>
+  <text x="74" y="354" text-anchor="end" font-size="11">tilbygg</text>
+  <text x="74" y="368" text-anchor="end" font-size="11">5,2 m</text>
+  <text x="572" y="300" font-size="11">Møne</text><text x="572" y="314" font-size="11">6,5 m</text>
+  <text x="508" y="380" font-size="11">Gesims</text>
+  <text x="508" y="394" font-size="11">3,0 m</text>
+  <text x="155" y="362" font-size="9">Fri høyde 2,4 m</text>
+
+  <!-- Takvinkel -->
+  <path d="M440,330 A40,40 0 0 0 449,296" fill="none" stroke="#111827"/>
+  <text x="410" y="316" font-size="11">41°</text>
+  <text x="20" y="60" font-size="11">Takvinkel tilbygg 34°, møne nord–sør (på tvers av snittet).</text>
+  <text x="20" y="76" font-size="11">Gesims tilbygg 2,8 m (se fasade øst og vest, A-03).</text>
+
+  <!-- Koter -->
+  <text x="590" y="414" font-size="11">+24,0</text>
+  <text x="20" y="444" font-size="10">Gj.snitt ferdig planert terreng = eksisterende terreng, kote +24,0. Ingen terrenginngrep.</text>
+  <text x="20" y="458" font-size="10">OK golv +24,3 (eksisterende og nytt på samme nivå).</text>
+  <text x="122" y="436" font-size="10" fill="#374151">Nord</text>
+  <text x="478" y="436" font-size="10" fill="#374151" text-anchor="end">Sør</text>
+
+  <!-- Målestokklinje: 4 m = 120 px -->
+  <rect x="20" y="480" width="60" height="5" fill="#111827" stroke="#111827"/>
+  <rect x="80" y="480" width="60" height="5" fill="#ffffff" stroke="#111827"/>
+  <text x="20" y="476" text-anchor="middle" font-size="10">0</text>
+  <text x="80" y="476" text-anchor="middle" font-size="10">2</text>
+  <text x="140" y="476" text-anchor="middle" font-size="10">4 m</text>
+
+  <!-- Tittelfelt -->
+  <rect x="320" y="470" width="310" height="100" fill="#ffffff" stroke="#111827"/>
+  <text x="330" y="488" font-weight="bold">SNITT A–A · M 1:100</text>
+  <text x="330" y="504" font-size="11">Gnr/bnr 12/34 · Solbakken 7, 9998 Hvileskjær</text>
+  <text x="330" y="518" font-size="11">Tiltakshaver: Knut Solberg</text>
+  <text x="330" y="532" font-size="11">Tiltak: Tilbygg til enebolig, 28 m²</text>
+  <text x="330" y="546" font-size="11">Tegn.nr. A-02 · Dato 2026-09-10 · Vedlegg E-2</text>
+  <text x="330" y="562" font-size="10" fill="#6b7280">Nytt markert gult. Snittet er vist på A-01.</text>
+</svg>

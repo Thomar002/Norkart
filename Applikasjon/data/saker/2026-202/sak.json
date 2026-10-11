@@ -1,0 +1,11 @@
+{
+  "sakId": "2026/202",
+  "mottatt": "2026-10-06",
+  "kanal": "E-post til postmottak",
+  "avsender": "Hilde Bakken <hilde.bakken@example.no>",
+  "emne": "Søknad om garasje",
+  "dokumenter": [
+    { "id": "DOK-0011", "tittel": "E-post fra søker", "fil": "epost.md" },
+    { "id": "DOK-0012", "tittel": "Skisse", "fil": "situasjonsplan.png" }
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "sakId": "2026/202",
+  "versjon": "2026-10-11",
+  "beskrivelse": "Fasit for saken. Bare validatoren leser filen. Agenten får den aldri, og den vises først når brukeren ber om validering.",
+  "sammendrag": "Hilde Bakken søker i en kort e-post om en frittliggende garasje på 36 m². Søknaden er langt fra komplett. Kommune, postnummer, plan og utnytting mangler. Spørsmålene i skjemaet er ikke besvart, tegningene mangler, og skissen har verken målestokk eller nordpil. Naboene er bare informert muntlig. Adressen (Solbakken 11 = 12/36) og gnr/bnr (12/35 = Solbakken 9) peker på hver sin eiendom, og tomtearealet stemmer ikke. Saken skal stoppe før planvurderingen.",
+  "kategori": {
+    "forventet": "nybygg",
+    "begrunnelse": "En ny frittliggende garasje som ikke skal brukes til beboelse."
+  },
+  "opplysninger": {
+    "tiltakshaver": "Hilde Bakken",
+    "kommune": null,
+    "kommunenr": null,
+    "gnr": 12,
+    "bnr": 35,
+    "adresse": "Solbakken 11",
+    "postnr": null,
+    "poststed": null,
+    "tomteareal": 700,
+    "byaFor": 128,
+    "tiltakBya": 36,
+    "planOppgitt": null
+  },
+  "punkter": {
+    "A1": { "forventet": "oppfylt", "begrunnelse": "Ett tiltak: én frittliggende garasje (DOK-0011)." },
+    "A2": { "forventet": "oppfylt", "begrunnelse": "Hilde Bakken søker selv, uten foretak (DOK-0011)." },
+    "A3": { "forventet": "ikke_relevant", "begrunnelse": "Gjelder bare endring." },
+    "A4": { "forventet": "oppfylt", "godtatt": ["uklart"], "begrunnelse": "6 × 6 m = 36 m² BYA. Garasjen skal bare brukes til bil og lagring (DOK-0011). BRA er ikke oppgitt, men én etasje på 36 m² kommer ikke over 70 m²." },
+    "B1": { "forventet": "oppfylt", "begrunnelse": "«gnr 12 bnr 35» (DOK-0011). At eiendommen ikke stemmer med adressen, fanges av M4." },
+    "B2": { "forventet": "mangler", "godtatt": ["uklart"], "begrunnelse": "E-posten oppgir ikke kommune. Bare mottakeradressen viser hvilken kommune den er sendt til." },
+    "B3": { "forventet": "mangler", "begrunnelse": "Bare «Solbakken 11», uten postnummer og poststed (DOK-0011)." },
+    "B4": { "forventet": "oppfylt", "begrunnelse": "Hilde Bakken (DOK-0011)." },
+    "B5": { "forventet": "oppfylt", "begrunnelse": "Telefon 911 22 333 og e-post. Hun bor på eiendommen («tomta vår»)." },
+    "B6": { "forventet": "oppfylt", "begrunnelse": "E-posten sier hva som skal bygges (garasje 6 × 6 m med saltak), hvor (nordøstre hjørne) og hva den skal brukes til (bil og lagring) (DOK-0011)." },
+    "B7": { "forventet": "mangler", "begrunnelse": "Søknaden oppgir ingen plan." },
+    "B8": { "forventet": "mangler", "begrunnelse": "Beregningsmåten for grad av utnytting er ikke oppgitt." },
+    "B9": { "forventet": "mangler", "begrunnelse": "Tomten (ca. 700 m²) og BYA før (128 m²) er oppgitt, men ikke BYA etter tiltaket og grad av utnytting." },
+    "B10": { "forventet": "mangler", "godtatt": ["uklart"], "begrunnelse": "BYA er 36 m², men BRA er ikke oppgitt." },
+    "B11": { "forventet": "mangler", "godtatt": ["uklart"], "begrunnelse": "Søknaden sier bare «ca. 2 meter» fra grensen mot øst og «ca. 5 meter fra veien». Avstanden til midten av veien og til nærmeste bygning mangler." },
+    "B12": { "forventet": "mangler", "begrunnelse": "Ingen svar om ledninger, høyspent, flom, ras, kulturminner og de andre forholdene." },
+    "B13": { "forventet": "mangler", "begrunnelse": "Søknaden svarer ikke på om det blir ny eller endret avkjørsel." },
+    "B14": { "forventet": "mangler", "begrunnelse": "Søknaden svarer ikke på om det trengs dispensasjon." },
+    "B15": { "forventet": "oppfylt", "godtatt": ["mangler", "uklart"], "begrunnelse": "«Vedlagt er en skisse», og én skisse er sendt (DOK-0012). Det er ingen egen vedleggsliste, så mangler godtas også." },
+    "B16": { "forventet": "oppfylt", "begrunnelse": "E-posten er datert 2026-10-06, og navnet står under teksten. Det holder når søknaden kommer på e-post fra tiltakshaver." },
+    "C1": { "forventet": "mangler", "godtatt": ["oppfylt", "uklart"], "begrunnelse": "Bare en håndskisse er vedlagt, og den er ikke en situasjonsplan på kartgrunnlag. Oppfylt godtas også, så lenge C2–C4 blir markert som mangler." },
+    "C2": { "forventet": "mangler", "begrunnelse": "Skissen har verken målestokk eller målestokklinje (DOK-0012)." },
+    "C3": { "forventet": "mangler", "begrunnelse": "Skissen har ingen nordpil (DOK-0012)." },
+    "C4": { "forventet": "mangler", "godtatt": ["uklart"], "begrunnelse": "En tomtegrense er tegnet, men eiendommen er ikke merket med gnr/bnr eller adresse (DOK-0012)." },
+    "C5": { "forventet": "oppfylt", "godtatt": ["uklart"], "begrunnelse": "Garasjen er gul og merket «garasje», og huset er merket «huset» (DOK-0012). Uten målestokk kan plasseringen ikke kontrolleres, så uklart godtas også." },
+    "C6": { "forventet": "oppfylt", "godtatt": ["uklart", "mangler"], "begrunnelse": "«6x6» står på skissen (DOK-0012). Målet står uten enhet på en skisse uten målestokk, så mangler godtas også." },
+    "C7": { "forventet": "mangler", "godtatt": ["uklart"], "begrunnelse": "Det står bare «ca 2 m» mot øst. Det er ikke et målsatt mål, og avstanden til de andre nabogrensene er ikke vist (DOK-0012)." },
+    "C8": { "forventet": "mangler", "godtatt": ["uklart"], "begrunnelse": "«ca 5 m» er målt til veien, ikke til midten av veien (DOK-0012)." },
+    "C9": { "forventet": "mangler", "godtatt": ["uklart"], "begrunnelse": "Avstanden til huset på egen tomt og til nærmeste bygning på naboeiendommen er ikke vist." },
+    "C10": { "forventet": "mangler", "godtatt": ["uklart", "ikke_relevant"], "begrunnelse": "Planen krever to parkeringsplasser (§ 5), og ingen er vist. Agenten kjenner ikke planen i formkontrollen, så uklart og ikke relevant godtas også." },
+    "C11": { "forventet": "uklart", "godtatt": ["mangler", "ikke_relevant"], "begrunnelse": "Søknaden sier ikke om garasjen får ny eller endret atkomst, og atkomsten er ikke vist." },
+    "C12": { "forventet": "uklart", "godtatt": ["ikke_relevant", "mangler"], "begrunnelse": "Søknaden sier ingenting om vann- og avløpsledninger." },
+    "C13": { "forventet": "uklart", "godtatt": ["ikke_relevant", "mangler"], "begrunnelse": "Søknaden sier ingenting om høyspent." },
+    "D1": { "forventet": "ikke_relevant", "begrunnelse": "Gjelder bare endring." },
+    "D2": { "forventet": "mangler", "begrunnelse": "Det er ingen plantegning av garasjen." },
+    "D3": { "forventet": "mangler", "begrunnelse": "Det er ingen snittegning." },
+    "D4": { "forventet": "ikke_relevant", "begrunnelse": "Gjelder bare endring." },
+    "D5": { "forventet": "mangler", "begrunnelse": "Det er ingen fasadetegninger." },
+    "D6": { "forventet": "mangler", "begrunnelse": "Det finnes ingen tegninger med målestokk." },
+    "D7": { "forventet": "ikke_relevant", "begrunnelse": "Gjelder bare endring." },
+    "D8": { "forventet": "mangler", "begrunnelse": "Det er ingen plantegning med utvendige mål og rombruk." },
+    "D9": { "forventet": "mangler", "begrunnelse": "Mønehøyden og gesimshøyden er ikke oppgitt." },
+    "D10": { "forventet": "mangler", "begrunnelse": "Terrenget er ikke vist." },
+    "D11": { "forventet": "mangler", "begrunnelse": "Takvinkelen er ikke oppgitt. Søknaden sier bare «saltak»." },
+    "D12": { "forventet": "mangler", "begrunnelse": "Skissen har ikke tittelfelt. Den er bare merket «Skisse – Hilde»." },
+    "D13": { "forventet": "uklart", "godtatt": ["mangler"], "begrunnelse": "Uten målestokk og tegninger kan målene ikke kontrolleres. Proporsjonene på skissen stemmer heller ikke med «ca. 2 m»." },
+    "E1": { "forventet": "mangler", "begrunnelse": "Det er ikke vedlagt noe nabovarsel." },
+    "E2": { "forventet": "mangler", "begrunnelse": "«Naboene er informert muntlig.» Det oppfyller ikke kravet til varsling i pbl § 21-3, og det finnes ingen kvittering." },
+    "E3": { "forventet": "mangler", "godtatt": ["uklart"], "begrunnelse": "Når det ikke er sendt noe nabovarsel, kan fristen ikke kontrolleres." },
+    "E4": { "forventet": "mangler", "godtatt": ["uklart"], "begrunnelse": "«Ingen hadde noe imot det» etter muntlig informasjon er ikke det samme som at fristen for merknader har gått ut uten merknader." },
+    "E5": { "forventet": "ikke_relevant", "godtatt": ["uklart"], "begrunnelse": "Frittliggende garasje på 36 m², ca. 2 m fra grensen. Den er dekket av unntaket i punktet." },
+    "M1": { "forventet": "avvik", "begrunnelse": "Søknaden oppgir ikke kommune." },
+    "M2": { "forventet": "oppfylt", "begrunnelse": "12/35 finnes i matrikkelen." },
+    "M3": { "forventet": "oppfylt", "begrunnelse": "Solbakken 11 finnes, men hører til 12/36." },
+    "M4": { "forventet": "avvik", "begrunnelse": "Solbakken 11 er 12/36. 12/35 er Solbakken 9." },
+    "M5": { "forventet": "avvik", "begrunnelse": "Postnummer og poststed er ikke oppgitt." },
+    "M6": { "forventet": "avvik", "begrunnelse": "Søknaden oppgir ca. 700 m². Matrikkelen har 760 m² for 12/35." },
+    "M7": { "forventet": "oppfylt", "begrunnelse": "128 m² i søknaden og for 12/35 i matrikkelen." },
+    "M8": { "forventet": "ikke_vurdert", "begrunnelse": "Gjelder bare endring." },
+    "M9": { "forventet": "oppfylt", "begrunnelse": "12/35 er omfattet av 8888/2019001." },
+    "M10": { "forventet": "ikke_vurdert", "begrunnelse": "Søknaden oppgir ingen plan." }
+  },
+  "port": {
+    "bestatt": false,
+    "begrunnelse": "Søknaden mangler mye, og eiendomsopplysningene stemmer ikke med matrikkelen. Planvurderingen skal ikke kjøres."
+  },
+  "plan": null,
+  "funn": [
+    {
+      "id": "F1",
+      "kritisk": true,
+      "tekst": "Adressen og gnr/bnr peker på hver sin eiendom. Solbakken 11 er 12/36, og 12/35 er Solbakken 9.",
+      "krav": [{ "punkt": "M4", "status": ["avvik"] }]
+    },
+    {
+      "id": "F2",
+      "kritisk": false,
+      "tekst": "Tomtearealet (ca. 700 m²) stemmer ikke med matrikkelen for 12/35 (760 m²).",
+      "krav": [{ "punkt": "M6", "status": ["avvik"] }]
+    },
+    {
+      "id": "F3",
+      "kritisk": true,
+      "tekst": "Det finnes ikke noe nabovarsel. At naboene er informert muntlig, er ikke varsling etter pbl § 21-3.",
+      "krav": [{ "punkt": "E1", "status": ["mangler"] }, { "punkt": "E2", "status": ["mangler"] }]
+    },
+    {
+      "id": "F4",
+      "kritisk": true,
+      "tekst": "Skissen kan ikke brukes som situasjonsplan. Den har verken målestokk, nordpil eller eiendomsbetegnelse.",
+      "krav": [
+        { "punkt": "C2", "status": ["mangler"] },
+        { "punkt": "C3", "status": ["mangler"] },
+        { "punkt": "C4", "status": ["mangler", "uklart"] }
+      ]
+    },
+    {
+      "id": "F5",
+      "kritisk": true,
+      "tekst": "Plantegning, snitt og fasadetegninger mangler.",
+      "krav": [
+        { "punkt": "D2", "status": ["mangler"] },
+        { "punkt": "D3", "status": ["mangler"] },
+        { "punkt": "D5", "status": ["mangler"] }
+      ]
+    },
+    {
+      "id": "F6",
+      "kritisk": false,
+      "tekst": "Plan, beregningsmåte og grad av utnytting er ikke oppgitt.",
+      "krav": [
+        { "punkt": "B7", "status": ["mangler"] },
+        { "punkt": "B8", "status": ["mangler"] },
+        { "punkt": "B9", "status": ["mangler"] }
+      ]
+    },
+    {
+      "id": "F7",
+      "kritisk": false,
+      "tekst": "Søknaden svarer ikke på spørsmålene om omgivelser, avkjørsel og dispensasjon.",
+      "krav": [
+        { "punkt": "B12", "status": ["mangler"] },
+        { "punkt": "B13", "status": ["mangler"] },
+        { "punkt": "B14", "status": ["mangler"] }
+      ]
+    },
+    {
+      "id": "F8",
+      "kritisk": false,
+      "tekst": "Kommune, postnummer og poststed er ikke oppgitt.",
+      "krav": [{ "punkt": "B2", "status": ["mangler", "uklart"] }, { "punkt": "B3", "status": ["mangler"] }]
+    },
+    {
+      "id": "F9",
+      "kritisk": false,
+      "tekst": "Garasjens BRA og høyder er ikke oppgitt.",
+      "krav": [{ "punkt": "B10", "status": ["mangler", "uklart"] }, { "punkt": "D9", "status": ["mangler"] }]
+    }
+  ],
+  "feller": [
+    {
+      "id": "L1",
+      "tekst": "Kategorien er nybygg. En frittliggende garasje er verken uklar eller et tilbygg.",
+      "krav": [{ "kategori": ["nybygg"] }]
+    },
+    {
+      "id": "L2",
+      "tekst": "Fritekst i en e-post er godt nok, og navnet under teksten holder som underskrift.",
+      "krav": [{ "punkt": "B16", "status": ["oppfylt"] }, { "punkt": "B6", "status": ["oppfylt"] }]
+    },
+    {
+      "id": "L3",
+      "tekst": "Kommunen, postnummeret og planen skal ikke gjettes ut fra mottakeradressen eller matrikkelen. De står ikke i søknaden.",
+      "krav": [{ "opplysning": "kommune", "verdi": null }, { "opplysning": "postnr", "verdi": null }, { "opplysning": "planOppgitt", "verdi": null }]
+    },
+    {
+      "id": "L4",
+      "tekst": "En frittliggende garasje på 36 m², minst 1 m fra grensen, trenger ikke samtykke fra naboen.",
+      "krav": [{ "punkt": "E5", "status": ["ikke_relevant", "uklart"] }]
+    }
+  ],
+  "merknader": [
+    "Garasjen ligger etter søkerens egne mål innenfor byggegrensene i planen: ca. 2 m mot øst (kravet er 4,0 m) og ca. 5 m mot veien (kravet er 6,0 m). En komplett søknad vil derfor trenge dispensasjon og nytt nabovarsel. Planvurderingen skal ikke kjøres nå, fordi porten stopper saken.",
+    "Fordi garasjen er i strid med byggegrensene, er den ikke unntatt fra søknadsplikt etter SAK10 § 4-1, selv om den er under 50 m².",
+    "I sak 2026/201 står Per og Mona Aas som hjemmelshavere til 12/35. Det er altså uklart om Hilde Bakken eier eiendommen hun oppgir. Agenten har ikke tilgang til denne opplysningen, så det inngår ikke i valideringen."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "beskrivelse": "Til skjermen. Hentet fra søkerens egne dokumenter. Agenten får ikke denne filen.",
+  "soker": { "navn": "Knut Solberg", "rolle": "Tiltakshaver, søker selv", "eiendom": "12/34", "adresse": "Solbakken 7" },
+  "tiltak": { "eiendom": "12/34", "tekst": "Tilbygg 28 m²", "x": 49, "y": 4, "b": 7, "d": 4, "kilde": "DOK-0002" },
+  "nabovarsel": {
+    "kilde": "DOK-0007",
+    "dato": "2026-09-14",
+    "mottakere": [
+      { "eiendom": "12/33", "navn": "Eva Lund", "maate": "Levert personlig", "bekreftelse": "Signert av mottaker" },
+      { "eiendom": "12/35", "navn": "Per og Mona Aas", "maate": "Levert personlig", "bekreftelse": "Signert av begge mottakere" },
+      { "eiendom": "11/8", "navn": "Siri Holm", "maate": "E-post", "bekreftelse": "Lesebekreftelse 2026-09-14" },
+      { "eiendom": "11/9", "navn": "Arne Vik", "maate": "Rekommandert brev", "bekreftelse": "Utlevert 2026-09-16" }
+    ]
+  }
+}

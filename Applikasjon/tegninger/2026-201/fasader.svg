@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 660" width="900" height="660" font-family="sans-serif" font-size="12">
+  <!-- Fasader nord, øst og vest, sak 2026/201. Illustrasjon. 1 m = 20 px (M 1:100).
+       Enebolig: 15 x 8 m, gesims 3,0 m, møne 6,5 m, møne øst–vest.
+       Tilbygg: 7 x 4 m mot nord i vestre del, gesims 2,8 m, møne 5,2 m, møne nord–sør. -->
+  <rect x="0" y="0" width="900" height="660" fill="#ffffff"/>
+
+  <!-- ===== FASADE NORD (sett fra nord: vest til venstre) ===== -->
+  <text x="60" y="40" font-weight="bold">FASADE NORD</text>
+  <!-- Enebolig: veggflate og takflate -->
+  <rect x="100" y="200" width="300" height="60" fill="#e5e7eb" stroke="#111827" stroke-width="1.5"/>
+  <rect x="100" y="130" width="300" height="70" fill="#9ca3af" stroke="#111827" stroke-width="1.5"/>
+  <rect x="300" y="215" width="40" height="30" fill="#ffffff" stroke="#111827"/>
+  <!-- Tilbygg med gavl mot nord -->
+  <polygon points="100,260 100,204 170,156 240,204 240,260" fill="#fde68a" stroke="#111827" stroke-width="2.5"/>
+  <rect x="150" y="215" width="40" height="30" fill="#ffffff" stroke="#111827"/>
+  <!-- Terreng -->
+  <line x1="40" y1="260" x2="460" y2="260" stroke="#111827" stroke-width="2"/>
+  <line x1="40" y1="264" x2="460" y2="264" stroke="#6b7280" stroke-dasharray="6 4"/>
+  <!-- Høyder -->
+  <g stroke="#111827" fill="none">
+    <line x1="430" y1="260" x2="430" y2="130"/><line x1="425" y1="130" x2="435" y2="130"/><line x1="425" y1="260" x2="435" y2="260"/>
+    <line x1="410" y1="260" x2="410" y2="200"/><line x1="405" y1="200" x2="415" y2="200"/>
+    <line x1="70" y1="260" x2="70" y2="156"/><line x1="65" y1="156" x2="75" y2="156"/><line x1="65" y1="260" x2="75" y2="260"/>
+    <line x1="170" y1="156" x2="70" y2="156" stroke-dasharray="2 3"/>
+  </g>
+  <text x="438" y="170" font-size="11">Møne 6,5 m</text>
+  <text x="416" y="236" font-size="11">3,0 m</text>
+  <text x="64" y="200" font-size="11" text-anchor="end">5,2 m</text>
+  <text x="170" y="282" text-anchor="middle" font-size="11">Tilbygg 7,0 m</text>
+  <text x="250" y="300" text-anchor="middle" font-size="11">Enebolig 15,0 m</text>
+
+  <!-- ===== FASADE ØST (sett fra øst: sør til venstre, nord til høyre) ===== -->
+  <text x="60" y="350" font-weight="bold">FASADE ØST</text>
+  <!-- Enebolig gavl 8 m -->
+  <polygon points="100,560 100,500 180,430 260,500 260,560" fill="#e5e7eb" stroke="#111827" stroke-width="1.5"/>
+  <rect x="160" y="515" width="40" height="30" fill="#ffffff" stroke="#111827"/>
+  <!-- Tilbygg stikker 4 m ut mot nord: vegg og takflate -->
+  <rect x="260" y="504" width="80" height="56" fill="#fde68a" stroke="#111827" stroke-width="2.5"/>
+  <rect x="260" y="456" width="80" height="48" fill="#fcd34d" stroke="#111827" stroke-width="2.5"/>
+  <line x1="40" y1="560" x2="380" y2="560" stroke="#111827" stroke-width="2"/>
+  <line x1="40" y1="564" x2="380" y2="564" stroke="#6b7280" stroke-dasharray="6 4"/>
+  <g stroke="#111827" fill="none">
+    <line x1="70" y1="560" x2="70" y2="430"/><line x1="65" y1="430" x2="75" y2="430"/><line x1="65" y1="560" x2="75" y2="560"/>
+    <line x1="355" y1="560" x2="355" y2="504"/><line x1="350" y1="504" x2="360" y2="504"/><line x1="350" y1="560" x2="360" y2="560"/>
+    <line x1="370" y1="560" x2="370" y2="456"/><line x1="365" y1="456" x2="375" y2="456"/>
+  </g>
+  <text x="64" y="500" font-size="11" text-anchor="end">6,5 m</text>
+  <text x="378" y="540" font-size="10">2,8 m</text>
+  <text x="378" y="480" font-size="10">5,2 m</text>
+  <text x="300" y="582" text-anchor="middle" font-size="11">Tilbygg 4,0 m</text>
+  <text x="180" y="582" text-anchor="middle" font-size="11">Enebolig 8,0 m</text>
+  <text x="100" y="596" font-size="10" fill="#374151">Sør</text>
+  <text x="340" y="596" font-size="10" fill="#374151" text-anchor="end">Nord</text>
+
+  <g transform="translate(80 0)">
+  <!-- ===== FASADE VEST (sett fra vest: nord til venstre, sør til høyre) ===== -->
+  <text x="430" y="350" font-weight="bold">FASADE VEST</text>
+  <rect x="440" y="504" width="80" height="56" fill="#fde68a" stroke="#111827" stroke-width="2.5"/>
+  <rect x="440" y="456" width="80" height="48" fill="#fcd34d" stroke="#111827" stroke-width="2.5"/>
+  <rect x="460" y="515" width="40" height="30" fill="#ffffff" stroke="#111827"/>
+  <polygon points="520,560 520,500 600,430 680,500 680,560" fill="#e5e7eb" stroke="#111827" stroke-width="1.5"/>
+  <rect x="580" y="515" width="40" height="30" fill="#ffffff" stroke="#111827"/>
+  <line x1="420" y1="560" x2="740" y2="560" stroke="#111827" stroke-width="2"/>
+  <line x1="420" y1="564" x2="740" y2="564" stroke="#6b7280" stroke-dasharray="6 4"/>
+  <g stroke="#111827" fill="none">
+    <line x1="710" y1="560" x2="710" y2="430"/><line x1="705" y1="430" x2="715" y2="430"/><line x1="705" y1="560" x2="715" y2="560"/>
+    <line x1="425" y1="560" x2="425" y2="504"/><line x1="420" y1="504" x2="430" y2="504"/>
+  </g>
+  <text x="716" y="500" font-size="11">6,5 m</text>
+  <text x="418" y="536" font-size="10" text-anchor="end">2,8 m</text>
+  <text x="440" y="596" font-size="10" fill="#374151">Nord</text>
+  <text x="680" y="596" font-size="10" fill="#374151" text-anchor="end">Sør</text>
+
+  </g>
+  <!-- Tegnforklaring og materialer -->
+  <rect x="580" y="40" width="14" height="10" fill="#fde68a" stroke="#111827"/>
+  <text x="600" y="49" font-size="11">Nytt (tilbygg)</text>
+  <rect x="580" y="58" width="14" height="10" fill="#e5e7eb" stroke="#111827"/>
+  <text x="600" y="67" font-size="11">Eksisterende</text>
+  <line x1="580" y1="82" x2="594" y2="82" stroke="#111827" stroke-width="2"/>
+  <text x="600" y="86" font-size="11">Ferdig planert terreng</text>
+  <line x1="580" y1="98" x2="594" y2="98" stroke="#6b7280" stroke-dasharray="4 3"/>
+  <text x="600" y="102" font-size="11">Eksisterende terreng</text>
+  <text x="580" y="124" font-size="10">Materialer: stående trepanel, grå som</text>
+  <text x="580" y="137" font-size="10">eksisterende. Sort takstein. Høyder er</text>
+  <text x="580" y="150" font-size="10">målt fra gj.snitt ferdig planert terreng.</text>
+  <text x="580" y="168" font-size="10">Fasade sør endres ikke og er ikke vist.</text>
+
+  <!-- Målestokklinje: 4 m = 80 px -->
+  <rect x="40" y="620" width="40" height="5" fill="#111827" stroke="#111827"/>
+  <rect x="80" y="620" width="40" height="5" fill="#ffffff" stroke="#111827"/>
+  <text x="40" y="616" text-anchor="middle" font-size="10">0</text>
+  <text x="80" y="616" text-anchor="middle" font-size="10">2</text>
+  <text x="120" y="616" text-anchor="middle" font-size="10">4 m</text>
+
+  <!-- Tittelfelt -->
+  <rect x="580" y="190" width="310" height="92" fill="#ffffff" stroke="#111827"/>
+  <text x="590" y="208" font-weight="bold">FASADER NORD, ØST, VEST · M 1:100</text>
+  <text x="590" y="225" font-size="11">Gnr/bnr 12/34 · Solbakken 7, 9998 Hvileskjær</text>
+  <text x="590" y="240" font-size="11">Tiltakshaver: Knut Solberg</text>
+  <text x="590" y="255" font-size="11">Tiltak: Tilbygg til enebolig, 28 m²</text>
+  <text x="590" y="270" font-size="11">Tegn.nr. A-03 · Dato 2026-09-10 · Vedlegg E-3</text>
+</svg>

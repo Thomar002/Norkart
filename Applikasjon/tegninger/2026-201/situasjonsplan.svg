@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 430" width="700" height="430" font-family="sans-serif" font-size="12">
+  <!-- Søkers situasjonsplan, sak 2026/201. Illustrasjon. 1 m = 10 px (M 1:500).
+       Tomt 12/34: 40 x 20 m. Enebolig 15 x 8 m. Tilbygg 7 x 4 m mot nord. -->
+  <rect x="0" y="0" width="700" height="430" fill="#ffffff"/>
+
+  <!-- Solbakken (offentlig veg), 6 m bred, senterlinje stiplet -->
+  <rect x="0" y="0" width="700" height="60" fill="#e5e7eb"/>
+  <line x1="0" y1="30" x2="700" y2="30" stroke="#6b7280" stroke-dasharray="10 6"/>
+  <text x="600" y="22" text-anchor="middle" font-weight="bold">Solbakken (offentlig veg)</text>
+
+  <!-- Naboeiendommer -->
+  <text x="60" y="200" text-anchor="middle" fill="#374151">12/33</text>
+  <text x="60" y="216" text-anchor="middle" fill="#374151">Solbakken 5</text>
+  <rect x="560" y="150" width="120" height="80" fill="#f3f4f6" stroke="#6b7280"/>
+  <text x="620" y="186" text-anchor="middle" fill="#374151">Bolig 12/35</text>
+  <text x="620" y="202" text-anchor="middle" fill="#374151">Solbakken 9</text>
+
+  <!-- Eiendomsgrense 12/34 -->
+  <rect x="120" y="70" width="400" height="200" fill="none" stroke="#111827" stroke-width="2.5"/>
+  <text x="512" y="262" text-anchor="end" font-size="11" font-weight="bold">12/34 · Solbakken 7 · 800 m²</text>
+
+  <!-- Eksisterende avkjørsel og to parkeringsplasser -->
+  <rect x="125" y="60" width="40" height="88" fill="#f3f4f6" stroke="#9ca3af"/>
+  <text x="145" y="98" text-anchor="middle" font-size="9" transform="rotate(-90 145 98)">Eksist. avkjørsel</text>
+  <rect x="132" y="150" width="25" height="50" fill="none" stroke="#111827"/>
+  <rect x="132" y="202" width="25" height="50" fill="none" stroke="#111827"/>
+  <text x="144" y="180" text-anchor="middle" font-size="11">P</text>
+  <text x="144" y="232" text-anchor="middle" font-size="11">P</text>
+
+  <!-- Eksisterende enebolig 15 x 8 m = 120 m² -->
+  <rect x="220" y="150" width="150" height="80" fill="#d1d5db" stroke="#111827" stroke-width="1.5"/>
+  <text x="300" y="186" text-anchor="middle">Eksisterende enebolig</text>
+  <text x="300" y="202" text-anchor="middle">15,0 × 8,0 m · 120 m²</text>
+
+  <!-- Nytt tilbygg 7 x 4 m = 28 m² -->
+  <rect x="220" y="110" width="70" height="40" fill="#fde68a" stroke="#111827" stroke-width="2"/>
+  <text x="255" y="126" text-anchor="middle" font-size="9" font-weight="bold">NYTT 28 m²</text>
+  <text x="255" y="140" text-anchor="middle" font-size="9">7,0 × 4,0 m</text>
+
+  <!-- Eksisterende VA-stikkledning -->
+  <line x1="345" y1="60" x2="345" y2="150" stroke="#2563eb" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="350" y="100" fill="#2563eb" font-size="10">Eksist. VA-stikkledning</text>
+  <text x="350" y="112" fill="#2563eb" font-size="10">(uendret)</text>
+
+  <!-- Mål -->
+  <g stroke="#111827" fill="none">
+    <line x1="205" y1="70" x2="205" y2="110"/><line x1="200" y1="70" x2="210" y2="70"/><line x1="200" y1="110" x2="210" y2="110"/>
+    <line x1="300" y1="30" x2="300" y2="110"/><line x1="295" y1="30" x2="305" y2="30"/><line x1="295" y1="110" x2="305" y2="110"/>
+    <line x1="120" y1="125" x2="220" y2="125"/><line x1="120" y1="120" x2="120" y2="130"/><line x1="220" y1="120" x2="220" y2="130"/>
+    <line x1="240" y1="230" x2="240" y2="270"/><line x1="235" y1="230" x2="245" y2="230"/><line x1="235" y1="270" x2="245" y2="270"/>
+    <line x1="370" y1="215" x2="520" y2="215"/><line x1="370" y1="210" x2="370" y2="220"/><line x1="520" y1="210" x2="520" y2="220"/>
+    <line x1="290" y1="144" x2="560" y2="144" stroke-dasharray="3 3"/>
+  </g>
+  <text x="201" y="94" text-anchor="end" font-size="11">4,0 m</text>
+  <text x="304" y="52" font-size="11">8,0 m til veimidte</text>
+  <text x="193" y="121" text-anchor="middle" font-size="10">10,0 m</text>
+  <text x="244" y="254" font-size="11">4,0 m</text>
+  <text x="445" y="228" text-anchor="middle" font-size="11">15,0 m</text>
+  <text x="470" y="140" text-anchor="middle" font-size="10">27,0 m til bolig 12/35</text>
+
+  <!-- Tegnforklaring -->
+  <rect x="20" y="300" width="14" height="10" fill="#fde68a" stroke="#111827"/>
+  <text x="40" y="309" font-size="11">Nytt (søknaden gjelder)</text>
+  <rect x="20" y="318" width="14" height="10" fill="#d1d5db" stroke="#111827"/>
+  <text x="40" y="327" font-size="11">Eksisterende</text>
+  <line x1="20" y1="341" x2="34" y2="341" stroke="#111827" stroke-width="2.5"/>
+  <text x="40" y="345" font-size="11">Eiendomsgrense</text>
+  <text x="20" y="363" font-size="10" fill="#374151">Avstander er målt fra yttervegg.</text>
+
+  <!-- Nordpil -->
+  <text x="660" y="268" text-anchor="middle" font-weight="bold">N</text>
+  <line x1="660" y1="276" x2="660" y2="304" stroke="#111827" stroke-width="2"/>
+  <polygon points="660,272 654,284 666,284" fill="#111827"/>
+
+  <!-- Målestokklinje: 10 m = 100 px -->
+  <rect x="200" y="300" width="50" height="5" fill="#111827" stroke="#111827"/>
+  <rect x="250" y="300" width="50" height="5" fill="#ffffff" stroke="#111827"/>
+  <text x="200" y="296" text-anchor="middle" font-size="10">0</text>
+  <text x="250" y="296" text-anchor="middle" font-size="10">5</text>
+  <text x="300" y="296" text-anchor="middle" font-size="10">10 m</text>
+
+  <!-- Tittelfelt -->
+  <rect x="370" y="320" width="322" height="102" fill="#ffffff" stroke="#111827"/>
+  <text x="380" y="338" font-weight="bold">SITUASJONSPLAN · M 1:500</text>
+  <text x="380" y="355" font-size="11">Gnr/bnr 12/34 · Solbakken 7, 9998 Hvileskjær</text>
+  <text x="380" y="370" font-size="11">Tiltakshaver: Knut Solberg</text>
+  <text x="380" y="385" font-size="11">Tiltak: Tilbygg til enebolig, 28 m²</text>
+  <text x="380" y="400" font-size="11">Tegn.nr. S-01 · Dato 2026-09-10 · Vedlegg D-1</text>
+  <text x="380" y="415" font-size="9" fill="#6b7280">Kartgrunnlag: kommunens situasjonskart 2026-09-02</text>
+</svg>

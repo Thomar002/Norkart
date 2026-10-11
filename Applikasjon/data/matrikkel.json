@@ -1,0 +1,46 @@
+{
+  "syntetisk": true,
+  "kommune": { "nr": "8888", "navn": "Hvileskjær" },
+  "eiendommer": [
+    {
+      "gnr": 12,
+      "bnr": 33,
+      "tomteareal": 780,
+      "planer": ["8888/2019001"],
+      "adresser": [{ "adresse": "Solbakken 5", "postnr": "9998", "poststed": "Hvileskjær" }],
+      "bygninger": [{ "bygningsnr": "300100033", "type": "Enebolig", "bya": 112 }]
+    },
+    {
+      "gnr": 12,
+      "bnr": 34,
+      "tomteareal": 800,
+      "planer": ["8888/2019001"],
+      "adresser": [{ "adresse": "Solbakken 7", "postnr": "9998", "poststed": "Hvileskjær" }],
+      "bygninger": [{ "bygningsnr": "300100034", "type": "Enebolig", "bya": 120 }]
+    },
+    {
+      "gnr": 12,
+      "bnr": 35,
+      "tomteareal": 760,
+      "planer": ["8888/2019001"],
+      "adresser": [{ "adresse": "Solbakken 9", "postnr": "9998", "poststed": "Hvileskjær" }],
+      "bygninger": [{ "bygningsnr": "300100035", "type": "Enebolig", "bya": 128 }]
+    },
+    {
+      "gnr": 12,
+      "bnr": 36,
+      "tomteareal": 820,
+      "planer": ["8888/2019001"],
+      "adresser": [{ "adresse": "Solbakken 11", "postnr": "9998", "poststed": "Hvileskjær" }],
+      "bygninger": []
+    },
+    {
+      "gnr": 14,
+      "bnr": 2,
+      "tomteareal": 1450,
+      "planer": [],
+      "adresser": [{ "adresse": "Fjellveien 3", "postnr": "9998", "poststed": "Hvileskjær" }],
+      "bygninger": [{ "bygningsnr": "300140002", "type": "Våningshus", "bya": 140 }]
+    }
+  ]
+}

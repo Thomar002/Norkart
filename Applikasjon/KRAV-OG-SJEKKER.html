@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Krav og sjekker for en byggesøknad i Start</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --flate: #ffffff; --tekst: #1d1f23; --svak: #5d636e; --linje: #e2e3e0;
+    --aksent: #2f5d8a; --aksent-bg: #e8eff7;
+    --endring: #2f5d8a; --endring-bg: #e3edf8;
+    --nybygg: #2e7350; --nybygg-bg: #e2f2e9;
+    --begge: #5d636e; --begge-bg: #ececea;
+    --ok: #2e7350; --ok-bg: #e2f2e9;
+    --feil: #a8322d; --feil-bg: #fbe7e5;
+    --usikker: #8a6212; --usikker-bg: #fbf0d9;
+    --noytral: #5d636e; --noytral-bg: #ececea;
+    --kode: #6a3f99; --kode-bg: #f0e8f8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181c; --flate: #1f2227; --tekst: #e6e7e9; --svak: #9aa1ab; --linje: #33373e;
+      --aksent: #8db7e2; --aksent-bg: #22303f;
+      --endring: #8db7e2; --endring-bg: #22303f;
+      --nybygg: #84cfa6; --nybygg-bg: #1f3529;
+      --begge: #b3b8bf; --begge-bg: #2c2f35;
+      --ok: #84cfa6; --ok-bg: #1f3529;
+      --feil: #f19b95; --feil-bg: #3d2322;
+      --usikker: #e6c072; --usikker-bg: #3a3020;
+      --noytral: #b3b8bf; --noytral-bg: #2c2f35;
+      --kode: #c4a5ea; --kode-bg: #2f2640;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 1rem; }
+  body {
+    margin: 0; background: var(--bg); color: var(--tekst);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .ramme { display: grid; grid-template-columns: 240px minmax(0, 1fr); max-width: 1240px; margin: 0 auto; }
+  nav {
+    position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto;
+    padding: 2rem 1rem 2rem 1.5rem; font-size: 0.9rem; border-right: 1px solid var(--linje);
+  }
+  nav h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--svak); margin: 0 0 0.6rem; }
+  nav a { display: block; color: var(--tekst); text-decoration: none; padding: 0.3rem 0.6rem; border-radius: 6px; }
+  nav a:hover { background: var(--aksent-bg); color: var(--aksent); }
+  nav .under { padding-left: 1.4rem; color: var(--svak); }
+  main { padding: 2rem 2.5rem 5rem; min-width: 0; }
+  header { margin-bottom: 2rem; }
+  h1 { font-size: 1.9rem; line-height: 1.25; margin: 0 0 0.6rem; }
+  h2 { font-size: 1.4rem; margin: 3rem 0 0.8rem; padding-top: 0.5rem; border-top: 1px solid var(--linje); }
+  h3 { font-size: 1.05rem; margin: 1.8rem 0 0.6rem; }
+  p { margin: 0.5rem 0 0.9rem; }
+  .ingress { color: var(--svak); max-width: 70ch; }
+  code { font: 0.88em ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--noytral-bg); padding: 0.1em 0.35em; border-radius: 4px; }
+  .kort { background: var(--flate); border: 1px solid var(--linje); border-radius: 10px; padding: 1rem 1.2rem; }
+  .merk { border-left: 4px solid var(--aksent); background: var(--aksent-bg); padding: 0.7rem 1rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+
+  /* Gangen */
+  .gang { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin: 1rem 0; counter-reset: steg; }
+  .steg { position: relative; background: var(--flate); border: 1px solid var(--linje); border-radius: 10px; padding: 0.9rem 1rem; }
+  .steg::before {
+    counter-increment: steg; content: counter(steg);
+    display: inline-grid; place-items: center; width: 1.7rem; height: 1.7rem; border-radius: 50%;
+    background: var(--aksent); color: var(--flate); font-weight: 700; font-size: 0.9rem; margin-bottom: 0.4rem;
+  }
+  .steg strong { display: block; }
+  .steg p { font-size: 0.9rem; color: var(--svak); margin: 0.3rem 0 0; }
+
+  /* Merker */
+  .m { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.12rem 0.5rem; border-radius: 999px; white-space: nowrap; line-height: 1.5; }
+  .m-endring { color: var(--endring); background: var(--endring-bg); }
+  .m-nybygg { color: var(--nybygg); background: var(--nybygg-bg); }
+  .m-begge { color: var(--begge); background: var(--begge-bg); }
+  .m-oblig { color: var(--tekst); background: transparent; border: 1px solid var(--linje); }
+  .m-valgfri { color: var(--svak); background: transparent; border: 1px dashed var(--linje); }
+  .m-ok { color: var(--ok); background: var(--ok-bg); }
+  .m-feil { color: var(--feil); background: var(--feil-bg); }
+  .m-usikker { color: var(--usikker); background: var(--usikker-bg); }
+  .m-noytral { color: var(--noytral); background: var(--noytral-bg); }
+  .m-agent { color: var(--aksent); background: var(--aksent-bg); }
+  .m-kode { color: var(--kode); background: var(--kode-bg); }
+
+  /* Tabeller */
+  .tabell { overflow-x: auto; background: var(--flate); border: 1px solid var(--linje); border-radius: 10px; margin: 0.8rem 0 1.2rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.93rem; }
+  th, td { text-align: left; vertical-align: top; padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--linje); }
+  tr:last-child td { border-bottom: none; }
+  th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--svak); font-weight: 600; background: var(--bg); }
+  td.id { font-weight: 700; white-space: nowrap; width: 3.5rem; }
+  td.merker { white-space: nowrap; width: 1%; }
+  td.merker .m { display: block; width: fit-content; margin-bottom: 0.25rem; }
+  td.kilde { color: var(--svak); font-size: 0.85rem; width: 22%; }
+  tr.skjult { display: none; }
+
+  /* Gruppehode */
+  .gruppehode { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+  .gruppehode h2 { flex: 1 1 auto; }
+  .bokstav {
+    display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 8px;
+    background: var(--aksent); color: var(--flate); font-weight: 800; margin-right: 0.5rem; font-size: 1rem; vertical-align: 0.1em;
+  }
+
+  /* Filter */
+  .filter {
+    position: sticky; top: 0; z-index: 2; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;
+    background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px);
+    padding: 0.7rem 0; margin: 1rem 0 0; border-bottom: 1px solid var(--linje);
+  }
+  .filter span { font-size: 0.85rem; color: var(--svak); margin-right: 0.3rem; }
+  .filter button {
+    font: inherit; font-size: 0.85rem; padding: 0.3rem 0.8rem; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--linje); background: var(--flate); color: var(--tekst);
+  }
+  .filter button[aria-pressed="true"] { background: var(--aksent); border-color: var(--aksent); color: var(--flate); }
+  .filter input {
+    font: inherit; font-size: 0.85rem; padding: 0.3rem 0.7rem; border-radius: 999px; margin-left: auto;
+    border: 1px solid var(--linje); background: var(--flate); color: var(--tekst); min-width: 14rem;
+  }
+
+  /* Regellister */
+  ol.regel, ul.regel { padding-left: 1.3rem; }
+  ol.regel li, ul.regel li { margin: 0.35rem 0; }
+  .utfall { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 0.8rem; align-items: baseline; margin: 0.8rem 0; }
+
+  .portliste { list-style: none; padding: 0; margin: 0.8rem 0; display: grid; gap: 0.5rem; }
+  .portliste li { background: var(--flate); border: 1px solid var(--linje); border-radius: 8px; padding: 0.6rem 0.9rem 0.6rem 2.4rem; position: relative; }
+  .portliste li::before { content: "✓"; position: absolute; left: 0.9rem; color: var(--ok); font-weight: 800; }
+
+  @media (max-width: 900px) {
+    .ramme { grid-template-columns: 1fr; }
+    nav { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--linje); }
+    main { padding: 1.5rem 1rem 4rem; }
+    .gang { grid-template-columns: 1fr 1fr; }
+    .filter input { margin-left: 0; min-width: 0; flex: 1 1 100%; }
+  }
+  @media print {
+    nav, .filter { display: none; }
+    .ramme { grid-template-columns: 1fr; }
+    tr.skjult { display: table-row; }
+  }
+</style>
+</head>
+<body>
+<div class="ramme">
+<nav aria-label="Innhold">
+  <h2>Innhold</h2>
+  <a href="#omfang">Omfang</a>
+  <a href="#gang">Gangen i kontrollen</a>
+  <a href="#statuser">Statuser</a>
+  <a href="#A">A Kategori og omfang</a>
+  <a href="#B">B Opplysninger</a>
+  <a class="under" href="#B-kode">Kodereglene for B</a>
+  <a href="#C">C Situasjonsplan</a>
+  <a href="#D">D Tegninger</a>
+  <a class="under" href="#D13-kode">Koderegelen for D13</a>
+  <a href="#E">E Nabovarsel</a>
+  <a class="under" href="#E5-kode">Koderegelen for E5</a>
+  <a href="#M">M Matrikkel og planregister</a>
+  <a href="#port">Port</a>
+  <a href="#plan">Planvurdering</a>
+  <a href="#hvem">Hvem avgjør hva</a>
+</nav>
+
+<main>
+<header>
+  <h1>Krav og sjekker for en byggesøknad i Start</h1>
+  <p class="ingress">Siden beskriver alle krav og sjekker som Start bruker på en innkommende byggesøknad. Den er skrevet ut fra koden: <code>data/sjekkliste.json</code>, <code>server.js</code>, <code>formregler.js</code>, <code>matrikkel.js</code> og <code>data/reguleringsplan.md</code>. Står det noe annet i koden, er det koden som gjelder.</p>
+</header>
+
+<section id="omfang">
+  <h2>Omfang</h2>
+  <p>Start kontrollerer søknader fra en privatperson som søker selv, uten ansvarlig søker (pbl § 20-4). Søknaden må høre til én av to kategorier:</p>
+  <div class="tabell"><table>
+    <thead><tr><th>Kategori</th><th>Hva den gjelder</th><th>Grense</th></tr></thead>
+    <tbody>
+      <tr><td><span class="m m-endring">endring</span></td><td>Tilbygg til en eksisterende bygning på eiendommen</td><td>Høyst 50 m² BYA og 50 m² BRA, og ikke påbygg</td></tr>
+      <tr><td><span class="m m-nybygg">nybygg</span></td><td>Ny frittliggende bygning</td><td>Høyst 70 m² BYA og 70 m² BRA, og ingen skal bo eller overnatte i den</td></tr>
+    </tbody>
+  </table></div>
+  <p>Påbygg, bruksendring, fasadeendring, riving, boliger og søknader med flere tiltak faller utenfor. Agenten gir dem kategorien <span class="m m-usikker">uklart</span>.</p>
+</section>
+
+<section id="gang">
+  <h2>Gangen i kontrollen</h2>
+  <div class="gang">
+    <div class="steg"><strong>Formkontroll</strong> <span class="m m-agent">agent</span><p>Kategoriserer søknaden, henter ut eiendomsopplysningene og går gjennom gruppe A–E.</p></div>
+    <div class="steg"><strong>Matrikkelkontroll</strong> <span class="m m-kode">kode</span><p>Kontrollerer opplysningene mot matrikkelen og planregisteret (gruppe M), så snart kategori og opplysninger finnes.</p></div>
+    <div class="steg"><strong>Port</strong> <span class="m m-kode">kode</span><p>Bare søknader som er komplette, og der eiendommen er bekreftet, går videre.</p></div>
+    <div class="steg"><strong>Planvurdering</strong> <span class="m m-agent">agent</span><p>Vurderer tiltaket mot hver paragraf i reguleringsplanen.</p></div>
+  </div>
+  <div class="merk">Med <code>stoppVedFeil</code> (standard i nettsiden) stopper kontrollen ved den første feilen: kategori <span class="m m-usikker">uklart</span>, et punkt med <span class="m m-feil">mangler</span> eller et matrikkelpunkt med <span class="m m-feil">avvik</span>. Uten stopp vurderes alle punktene.</div>
+</section>
+
+<section id="statuser">
+  <h2>Statuser</h2>
+  <div class="tabell"><table>
+    <thead><tr><th>Hvem</th><th>Statuser</th></tr></thead>
+    <tbody>
+      <tr><td>Agenten (gruppe A–E)</td><td><span class="m m-ok">oppfylt</span> <span class="m m-feil">mangler</span> <span class="m m-usikker">uklart</span> <span class="m m-noytral">ikke_relevant</span></td></tr>
+      <tr><td>Koden (gruppe M)</td><td><span class="m m-ok">oppfylt</span> <span class="m m-feil">avvik</span> <span class="m m-noytral">ikke_vurdert</span></td></tr>
+      <tr><td>Planvurderingen (per paragraf)</td><td><span class="m m-ok">samsvar</span> <span class="m m-feil">avvik</span> <span class="m m-usikker">usikkert</span> <span class="m m-noytral">ikke_relevant</span></td></tr>
+    </tbody>
+  </table></div>
+  <p><span class="m m-begge">gjelder</span> sier om punktet gjelder <span class="m m-endring">endring</span>, <span class="m m-nybygg">nybygg</span> eller <span class="m m-begge">begge</span>. Punkter merket <span class="m m-oblig">obligatorisk</span> må vurderes. Punkter merket <span class="m m-valgfri">hvis relevant</span> kan være <span class="m m-noytral">ikke_relevant</span>.</p>
+
+  <h3>Koden retter agentens status (<code>ryddPunkt</code> i <code>server.js</code>)</h3>
+  <ul class="regel">
+    <li>Gjelder punktet bare den andre kategorien, settes det til <span class="m m-noytral">ikke_relevant</span>. Det skjer bare når kategorien ikke er <span class="m m-usikker">uklart</span>.</li>
+    <li>Er et obligatorisk punkt satt til <span class="m m-noytral">ikke_relevant</span>, endres det til <span class="m m-usikker">uklart</span>.</li>
+    <li>Har agenten hoppet over et punkt, settes det til <span class="m m-usikker">uklart</span> med teksten «Agenten vurderte ikke punktet.».</li>
+  </ul>
+</section>
+
+<div class="filter" role="group" aria-label="Filtrer kontrollisten">
+  <span>Vis punkter for</span>
+  <button type="button" data-filter="alle" aria-pressed="true">Alle</button>
+  <button type="button" data-filter="endring" aria-pressed="false">Endring</button>
+  <button type="button" data-filter="nybygg" aria-pressed="false">Nybygg</button>
+  <input type="search" id="sok" placeholder="Søk i punktene, f.eks. nabogrense" aria-label="Søk i punktene">
+</div>
+
+<section id="A">
+  <h2><span class="bokstav">A</span>Kategori og omfang <span class="m m-agent">agent</span></h2>
+  <div class="tabell"><table class="punkter">
+    <thead><tr><th>ID</th><th>Gjelder</th><th>Krav</th><th>Kilde</th></tr></thead>
+    <tbody>
+      <tr data-gjelder="begge"><td class="id">A1</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Søknaden gjelder ett tiltak som hører til én kategori: «endring» (tilbygg til en eksisterende bygning på eiendommen) eller «nybygg» (ny frittliggende bygning).</td><td class="kilde">pbl § 20-1</td></tr>
+      <tr data-gjelder="begge"><td class="id">A2</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Tiltakshaver er en privatperson som søker selv, uten ansvarlig søker eller foretak.</td><td class="kilde">pbl § 20-4</td></tr>
+      <tr data-gjelder="endring"><td class="id">A3</td><td class="merker"><span class="m m-endring">endring</span><span class="m m-oblig">obligatorisk</span></td><td>Tilbygget har høyst 50 m² bebygd areal (BYA) og høyst 50 m² bruksareal (BRA), og det er ikke et påbygg.</td><td class="kilde">SAK10 § 3-1 første ledd bokstav a</td></tr>
+      <tr data-gjelder="nybygg"><td class="id">A4</td><td class="merker"><span class="m m-nybygg">nybygg</span><span class="m m-oblig">obligatorisk</span></td><td>Den frittliggende bygningen har høyst 70 m² BYA og høyst 70 m² BRA, og ingen skal bo eller overnatte i den.</td><td class="kilde">SAK10 § 3-1 første ledd bokstav b</td></tr>
+    </tbody>
+  </table></div>
+  <p>Kategorien <span class="m m-usikker">uklart</span> stopper kontrollen ved A1 og gjør at søknaden ikke går gjennom porten.</p>
+</section>
+
+<section id="B">
+  <h2><span class="bokstav">B</span>Opplysninger i søknaden <span class="m m-agent">agent</span> <span class="m m-kode">kode i parallell-kode</span></h2>
+  <div class="tabell"><table class="punkter">
+    <thead><tr><th>ID</th><th>Gjelder</th><th>Krav</th><th>Kilde</th></tr></thead>
+    <tbody>
+      <tr data-gjelder="begge"><td class="id">B1</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Gårdsnummer og bruksnummer er oppgitt, og festenummer eller seksjonsnummer hvis eiendommen har det.</td><td class="kilde">Forenklet byggesøknad del A</td></tr>
+      <tr data-gjelder="begge"><td class="id">B2</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Kommunen er oppgitt med navn eller kommunenummer.</td><td class="kilde">Del A</td></tr>
+      <tr data-gjelder="begge"><td class="id">B3</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Byggeadressen er oppgitt med postnummer og poststed.</td><td class="kilde">Del A</td></tr>
+      <tr data-gjelder="begge"><td class="id">B4</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Tiltakshavers fulle navn er oppgitt.</td><td class="kilde">Del B</td></tr>
+      <tr data-gjelder="begge"><td class="id">B5</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Tiltakshavers telefon eller e-post er oppgitt. Postadressen er også oppgitt hvis tiltakshaver bor et annet sted enn byggeadressen.</td><td class="kilde">Del B</td></tr>
+      <tr data-gjelder="begge"><td class="id">B6</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Tiltaket er beskrevet med egne ord: hva som skal bygges, hvor på eiendommen og hva det skal brukes til.</td><td class="kilde">Første side</td></tr>
+      <tr data-gjelder="begge"><td class="id">B7</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Planen som gjelder eiendommen, er oppgitt med navn eller plan-ID.</td><td class="kilde">Del C</td></tr>
+      <tr data-gjelder="begge"><td class="id">B8</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Beregningsmåten for grad av utnytting er oppgitt (for eksempel %-BYA).</td><td class="kilde">Del D</td></tr>
+      <tr data-gjelder="begge"><td class="id">B9</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Tomtens nettoareal, BYA før og etter tiltaket og grad av utnytting etter tiltaket er oppgitt.</td><td class="kilde">Del D</td></tr>
+      <tr data-gjelder="begge"><td class="id">B10</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Tiltakets eget BYA og BRA er oppgitt.</td><td class="kilde">SAK10 § 3-1; del D</td></tr>
+      <tr data-gjelder="begge"><td class="id">B11</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Korteste avstand fra tiltaket til nabogrense, midten av vei og nærmeste bygning er oppgitt.</td><td class="kilde">Del E</td></tr>
+      <tr data-gjelder="begge"><td class="id">B12</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Søknaden svarer på om tiltaket ligger nær VA-ledninger, høyspent, jernbane eller trikk, strandsone eller vassdrag, i flom-, ras- eller kvikkleireområde, på forurenset grunn, nær kulturminner eller vernede arter, i område med midlertidig byggeforbud eller i konsesjonsområde for fjernvarme. Ved ja er uttalelse eller tillatelse vedlagt.</td><td class="kilde">Del F</td></tr>
+      <tr data-gjelder="begge"><td class="id">B13</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Søknaden svarer på om tiltaket gir ny eller endret avkjørsel. Ved ja er avkjøringstillatelse eller tinglyst veirett vedlagt.</td><td class="kilde">Del G</td></tr>
+      <tr data-gjelder="begge"><td class="id">B14</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Søknaden svarer på om tiltaket trenger dispensasjon eller tillatelse fra andre myndigheter. Ved ja er begrunnet dispensasjonssøknad eller vedtak vedlagt.</td><td class="kilde">pbl § 19-1</td></tr>
+      <tr data-gjelder="begge"><td class="id">B15</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Søknaden har en vedleggsliste, og den stemmer med dokumentene som faktisk er sendt inn.</td><td class="kilde">Del H</td></tr>
+      <tr data-gjelder="begge"><td class="id">B16</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Søknaden er datert og underskrevet av tiltakshaver. Kommer den på e-post fra tiltakshaver, holder det at navnet står under teksten.</td><td class="kilde">Del I; SAK10 § 5-1</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="B-kode">Kodereglene for gruppe B (<code>kontrollerOpplysninger</code> i <code>formregler.js</code>)</h3>
+  <p>I kjøringen <code>parallell-kode</code> henter agenten bare ut fakta (<code>FAKTA_SKJEMA</code>), og koden avgjør punktene. Et punkt er enten <span class="m m-ok">oppfylt</span> eller <span class="m m-feil">mangler</span>. Tom tekst, <code>null</code> og manglende verdi regnes som «ikke oppgitt».</p>
+  <div class="tabell"><table class="punkter">
+    <thead><tr><th>ID</th><th>Regel</th></tr></thead>
+    <tbody>
+      <tr data-gjelder="begge"><td class="id">B1</td><td><code>gnr</code> og <code>bnr</code> er begge heltall.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B2</td><td>Kommunenavn eller kommunenummer er oppgitt.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B3</td><td>Adresse, postnummer og poststed er alle oppgitt.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B4</td><td>Navnet har minst to ord. Bare fornavn gir <span class="m m-feil">mangler</span>.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B5</td><td>Telefon eller e-post er oppgitt. Svarer søknaden at tiltakshaver ikke bor på byggeadressen, må også postadressen være oppgitt.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B6</td><td>Hva som skal bygges, hvor på eiendommen og bruken er alle oppgitt.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B7</td><td>Planen er oppgitt (navn eller plan-ID).</td></tr>
+      <tr data-gjelder="begge"><td class="id">B8</td><td>Beregningsmåten er oppgitt.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B9</td><td>Tomteareal, BYA før, BYA etter og grad av utnytting etter er alle oppgitt.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B10</td><td>Tiltakets BYA og BRA er begge oppgitt.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B11</td><td>Avstand til nabogrense, til midten av vei og til nærmeste bygning er alle oppgitt. Avstand bare til veikant eller veigrense er ikke nok.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B12</td><td>Søknaden svarer ja eller nei på alle forholdene. Ved minst ett ja må uttalelse eller tillatelse være vedlagt.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B13</td><td>Spørsmålet om avkjørsel er besvart. Ved ja må tillatelse eller veirett være vedlagt.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B14</td><td>Spørsmålet om dispensasjon er besvart. Ved ja må dispensasjonssøknad eller vedtak være vedlagt.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B15</td><td>Vedleggslisten finnes. Hvert vedlegg i listen peker på et dokument i saken, og hvert innsendt dokument utenom selve søknaden står i listen.</td></tr>
+      <tr data-gjelder="begge"><td class="id">B16</td><td>Datoen er oppgitt, og søknaden er enten signert eller har navnet under e-posten.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="C">
+  <h2><span class="bokstav">C</span>Situasjonsplan <span class="m m-agent">agent</span></h2>
+  <div class="tabell"><table class="punkter">
+    <thead><tr><th>ID</th><th>Gjelder</th><th>Krav</th></tr></thead>
+    <tbody>
+      <tr data-gjelder="begge"><td class="id">C1</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>En situasjonsplan er vedlagt som eget dokument.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C2</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Målestokken er oppgitt, vanligvis 1:500 (1:1000 for store tiltak), og planen har en målestokklinje.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C3</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Planen har nordpil.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C4</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Eiendomsgrensene er tegnet inn, og eiendommen er merket med gnr/bnr eller adresse.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C5</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Tiltaket er tegnet inn på riktig sted og skilt fra eksisterende bebyggelse med farge, skravur eller tekst.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C6</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Tiltakets utvendige mål står på planen.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C7</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Minste avstand fra tiltaket til nabogrensene er målsatt, målt fra yttervegg.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C8</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-valgfri">hvis relevant</span></td><td>Avstanden til midten av veien er målsatt når tiltaket ligger mot vei.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C9</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-valgfri">hvis relevant</span></td><td>Avstanden til andre bygninger på egen eiendom og til nærmeste bygning på naboeiendommen er vist.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C10</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-valgfri">hvis relevant</span></td><td>Parkeringsplasser på egen tomt er vist når planen har krav til parkering.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C11</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-valgfri">hvis relevant</span></td><td>Atkomst og avkjørsel er vist når de er nye eller endres.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C12</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-valgfri">hvis relevant</span></td><td>VA-ledninger og tilknytningspunkt er vist når tiltaket ligger nær ledninger eller skal kobles til.</td></tr>
+      <tr data-gjelder="begge"><td class="id">C13</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-valgfri">hvis relevant</span></td><td>Høyspentlinjer er vist når tiltaket ligger nær en høyspentlinje.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="ingress">Kilder: SAK10 § 5-4, Kristiansand «Slik søker du» og informasjonsarket «Situasjonsplan – hva kreves?».</p>
+</section>
+
+<section id="D">
+  <h2><span class="bokstav">D</span>Tegninger <span class="m m-agent">agent</span> <span class="m m-kode">D13 med kode i parallell-kode</span></h2>
+  <div class="tabell"><table class="punkter">
+    <thead><tr><th>ID</th><th>Gjelder</th><th>Krav</th></tr></thead>
+    <tbody>
+      <tr data-gjelder="endring"><td class="id">D1</td><td class="merker"><span class="m m-endring">endring</span><span class="m m-oblig">obligatorisk</span></td><td>Plantegningen viser hele etasjen der tilbygget kommer, med både eksisterende og nytt areal.</td></tr>
+      <tr data-gjelder="nybygg"><td class="id">D2</td><td class="merker"><span class="m m-nybygg">nybygg</span><span class="m m-oblig">obligatorisk</span></td><td>Det finnes plantegning av alle etasjer i bygningen.</td></tr>
+      <tr data-gjelder="begge"><td class="id">D3</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Det finnes minst én snittegning, og snittets plassering er markert på plantegningen.</td></tr>
+      <tr data-gjelder="endring"><td class="id">D4</td><td class="merker"><span class="m m-endring">endring</span><span class="m m-oblig">obligatorisk</span></td><td>Det finnes fasadetegninger av alle fasader som endres, merket med himmelretning.</td></tr>
+      <tr data-gjelder="nybygg"><td class="id">D5</td><td class="merker"><span class="m m-nybygg">nybygg</span><span class="m m-oblig">obligatorisk</span></td><td>Det finnes fasadetegninger av alle fire fasader, merket med himmelretning.</td></tr>
+      <tr data-gjelder="begge"><td class="id">D6</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Hver tegning har oppgitt målestokk, vanligvis 1:100 (eventuelt 1:200).</td></tr>
+      <tr data-gjelder="endring"><td class="id">D7</td><td class="merker"><span class="m m-endring">endring</span><span class="m m-oblig">obligatorisk</span></td><td>Tegningene skiller tydelig mellom eksisterende og nytt, for eksempel med farge eller tykkere strek.</td></tr>
+      <tr data-gjelder="begge"><td class="id">D8</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Plantegningen har utvendige mål og viser hva rommene skal brukes til.</td></tr>
+      <tr data-gjelder="begge"><td class="id">D9</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Mønehøyde og gesimshøyde er målsatt fra gjennomsnittlig ferdig planert terreng.</td></tr>
+      <tr data-gjelder="begge"><td class="id">D10</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Fasader og snitt viser terrenglinje for eksisterende og ferdig planert terreng.</td></tr>
+      <tr data-gjelder="begge"><td class="id">D11</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Snittet viser takvinkel i grader.</td></tr>
+      <tr data-gjelder="begge"><td class="id">D12</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Hver tegning har tittelfelt med gnr/bnr, byggeadresse, tiltakshavers navn, tiltakets art, type tegning, tegningsnummer, målestokk og dato.</td></tr>
+      <tr data-gjelder="begge"><td class="id">D13</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Målene på tegningene og situasjonsplanen stemmer med arealene og avstandene i søknaden. Parkering på terreng regnes med 18 m² per plass i BYA (veileder H-2300).</td></tr>
+    </tbody>
+  </table></div>
+  <p class="ingress">Kilder: informasjonsarket «Tegninger – hva kreves?», Kristiansand «Slik søker du» og DiBK H-2300.</p>
+
+  <h3 id="D13-kode">Koderegelen for D13 (<code>kontrollerMaal</code> i <code>formregler.js</code>)</h3>
+  <p>Koden sammenligner bare mål som står både i søknaden og på tegningene:</p>
+  <div class="tabell"><table>
+    <thead><tr><th>Sammenligning</th><th>Toleranse</th></tr></thead>
+    <tbody>
+      <tr><td>Tiltakets BYA mot lengde × bredde på tegningen</td><td>±2 %, minst 1 m²</td></tr>
+      <tr><td>BYA før tiltaket mot summen av lengde × bredde for eksisterende bygninger</td><td>±2 %, minst 1 m²</td></tr>
+      <tr><td>Avstand til nabogrense, til grensen mot vei, til midten av vei og til nærmeste bygning</td><td>±0,1 m</td></tr>
+      <tr><td>Antall parkeringsplasser i søknaden mot antall tegnet</td><td>Må være likt</td></tr>
+      <tr><td>BYA for parkering mot antall plasser × 18 m²</td><td>Må være likt</td></tr>
+    </tbody>
+  </table></div>
+  <div class="utfall kort">
+    <span class="m m-feil">mangler</span><span>når minst ett mål avviker.</span>
+    <span class="m m-usikker">uklart</span><span>når situasjonsplanen ikke har målestokk, selv om tallene stemmer.</span>
+    <span class="m m-usikker">uklart</span><span>når ingen mål kan sammenlignes.</span>
+    <span class="m m-ok">oppfylt</span><span>ellers.</span>
+  </div>
+</section>
+
+<section id="E">
+  <h2><span class="bokstav">E</span>Nabovarsel <span class="m m-agent">agent</span> <span class="m m-kode">E5 med kode i parallell-kode</span></h2>
+  <div class="tabell"><table class="punkter">
+    <thead><tr><th>ID</th><th>Gjelder</th><th>Krav</th><th>Kilde</th></tr></thead>
+    <tbody>
+      <tr data-gjelder="begge"><td class="id">E1</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>En kopi av nabovarselet er vedlagt. Den beskriver tiltaket og nevner dispensasjon hvis det søkes om det.</td><td class="kilde">pbl § 21-3</td></tr>
+      <tr data-gjelder="begge"><td class="id">E2</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Det er dokumentert at alle naboer og gjenboere er varslet, med kvittering for personlig levering, e-post/SMS eller rekommandert sending.</td><td class="kilde">pbl § 21-3</td></tr>
+      <tr data-gjelder="begge"><td class="id">E3</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Søknaden ble sendt minst 2 uker og senest 1 år etter nabovarselet.</td><td class="kilde">SAK10 § 5-2</td></tr>
+      <tr data-gjelder="begge"><td class="id">E4</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-oblig">obligatorisk</span></td><td>Merknader fra naboer er vedlagt sammen med tiltakshavers kommentarer, eller søknaden opplyser at det ikke kom merknader.</td><td class="kilde">SAK10 § 5-2</td></tr>
+      <tr data-gjelder="begge"><td class="id">E5</td><td class="merker"><span class="m m-begge">begge</span><span class="m m-valgfri">hvis relevant</span></td><td>Ligger tiltaket nærmere nabogrensen enn 4 m, er skriftlig samtykke fra alle hjemmelshavere på naboeiendommen vedlagt («Erklæring om nabogrense»). Unntak: frittliggende garasje, bod eller lignende på høyst 50 m² BYA og BRA, minst 1 m fra grensen.</td><td class="kilde">pbl § 29-4</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="E5-kode">Koderegelen for E5 (<code>kontrollerNabogrense</code> i <code>formregler.js</code>)</h3>
+  <p>Koden bruker avstanden til nabogrensen fra søknaden. Står den ikke der, brukes avstanden på situasjonsplanen. Grensen mot vei regnes ikke som nabogrense.</p>
+  <ol class="regel kort">
+    <li>Avstanden står ingen av stedene: <span class="m m-usikker">uklart</span>.</li>
+    <li>Avstanden er 4 m eller mer: <span class="m m-noytral">ikke_relevant</span>.</li>
+    <li>Tiltaket er en frittliggende garasje eller bod minst 1 m fra grensen:
+      <ul>
+        <li>BYA og BRA er begge høyst 50 m²: <span class="m m-noytral">ikke_relevant</span>, fordi unntaket gjelder.</li>
+        <li>BYA er høyst 50 m², men BRA er ikke oppgitt: <span class="m m-usikker">uklart</span>.</li>
+      </ul>
+    </li>
+    <li>I alle andre tilfeller: <span class="m m-ok">oppfylt</span> hvis samtykke er vedlagt, ellers <span class="m m-feil">mangler</span>.</li>
+  </ol>
+</section>
+
+<section id="M">
+  <h2><span class="bokstav">M</span>Matrikkel og planregister <span class="m m-kode">kode</span></h2>
+  <p>Koden ligger i <code>kontrollerMatrikkel</code> i <code>matrikkel.js</code>. Før sammenligning normaliseres tekst: NFC, små bokstaver, mellomrom slått sammen og punktum eller komma til slutt fjernet.</p>
+  <div class="tabell"><table class="punkter">
+    <thead><tr><th>ID</th><th>Krav</th><th>Regel</th><th>Utfall</th></tr></thead>
+    <tbody>
+      <tr data-gjelder="begge"><td class="id">M1</td><td>Kommunen i søknaden er Hvileskjær (8888).</td><td>Er kommunenummeret oppgitt, må det være <code>8888</code>. Er navnet oppgitt, må det være «Hvileskjær» eller <code>8888</code>.</td><td><span class="m m-feil">avvik</span> når kommune mangler eller er feil</td></tr>
+      <tr data-gjelder="begge"><td class="id">M2</td><td>Gnr/bnr finnes i matrikkelen for kommunen.</td><td>Begge må være heltall og finnes som eiendom.</td><td><span class="m m-feil">avvik</span></td></tr>
+      <tr data-gjelder="begge"><td class="id">M3</td><td>Adressen finnes i matrikkelens adresseregister.</td><td>Søk i adressene for alle eiendommene.</td><td><span class="m m-feil">avvik</span> når den ikke finnes</td></tr>
+      <tr data-gjelder="begge"><td class="id">M4</td><td>Adressen hører til samme eiendom som gnr/bnr.</td><td>Adressen og gnr/bnr må peke på samme eiendom.</td><td><span class="m m-feil">avvik</span>, eller <span class="m m-noytral">ikke_vurdert</span> når adressen eller eiendommen ikke ble funnet</td></tr>
+      <tr data-gjelder="begge"><td class="id">M5</td><td>Postnummer og poststed stemmer med adressen.</td><td>Begge må være oppgitt og stemme med adressen i matrikkelen.</td><td><span class="m m-feil">avvik</span>, eller <span class="m m-noytral">ikke_vurdert</span> uten adressetreff</td></tr>
+      <tr data-gjelder="begge"><td class="id">M6</td><td>Tomtearealet avviker høyst 1 % fra matrikkelen.</td><td>|oppgitt − registrert| ≤ 1 % av registrert.</td><td><span class="m m-feil">avvik</span>, eller <span class="m m-noytral">ikke_vurdert</span> når tomteareal ikke er oppgitt</td></tr>
+      <tr data-gjelder="begge"><td class="id">M7</td><td>BYA før tiltaket avviker høyst 1 % (minst 1 m²) fra bygningene i matrikkelen.</td><td>Sammenlignes med summen av BYA for de registrerte bygningene. Toleransen er 1 %, minst 1 m².</td><td><span class="m m-feil">avvik</span>, eller <span class="m m-noytral">ikke_vurdert</span> når BYA før ikke er oppgitt</td></tr>
+      <tr data-gjelder="endring"><td class="id">M8</td><td>Ved endring har eiendommen minst én registrert bygning.</td><td>Gjelder bare kategorien <span class="m m-endring">endring</span>.</td><td><span class="m m-feil">avvik</span> når ingen bygning er registrert</td></tr>
+      <tr data-gjelder="begge"><td class="id">M9</td><td>Eiendommen er omfattet av en plan i planregisteret.</td><td>Første plan i planregisteret som eiendommen viser til.</td><td><span class="m m-feil">avvik</span> uten plan</td></tr>
+      <tr data-gjelder="begge"><td class="id">M10</td><td>Planen i søknaden er den samme som i planregisteret.</td><td>Teksten i søknaden inneholder plan-ID-en (<code>8888/2019001</code>), løpenummeret (<code>2019001</code>) eller plannavnet.</td><td><span class="m m-feil">avvik</span>, eller <span class="m m-noytral">ikke_vurdert</span> når søknaden ikke oppgir plan</td></tr>
+    </tbody>
+  </table></div>
+  <div class="merk"><span class="m m-noytral">ikke_vurdert</span> stopper ikke porten. Det gjør bare <span class="m m-feil">avvik</span>.</div>
+</section>
+
+<section id="port">
+  <h2>Port</h2>
+  <p>Søknaden går videre til planvurderingen bare når alt dette holder:</p>
+  <ul class="portliste">
+    <li>Kategorien er <span class="m m-endring">endring</span> eller <span class="m m-nybygg">nybygg</span>, ikke <span class="m m-usikker">uklart</span>.</li>
+    <li>Ingen punkter i gruppe A–E har status <span class="m m-feil">mangler</span>. Statusene <span class="m m-usikker">uklart</span> og <span class="m m-noytral">ikke_relevant</span> stopper ikke porten.</li>
+    <li>Ingen punkter i gruppe M har status <span class="m m-feil">avvik</span>.</li>
+    <li>Kontrollen ble ikke stoppet ved første feil.</li>
+    <li>I parallell kjøring: opplysningene er kontrollert mot matrikkelen.</li>
+  </ul>
+  <p>Stopper porten, får saksbehandler en mangelliste med alle punktene som har <span class="m m-feil">mangler</span> eller <span class="m m-feil">avvik</span>, og en begrunnelse for hvert.</p>
+</section>
+
+<section id="plan">
+  <h2>Planvurdering <span class="m m-agent">agent</span></h2>
+  <p>Agenten vurderer søknaden mot hver paragraf i planbestemmelsene for planen fra planregisteret. Den ser også plankartet og tegningene. Opplysningene fra matrikkelen går foran tallene i søknaden. For hver paragraf skriver agenten kravet, det søknaden oppgir (med dokument-ID), en begrunnelse og en vurdering.</p>
+  <p>Paragrafene i <code>data/reguleringsplan.md</code> (Reguleringsplan for Solbakken boligområde, 8888/2019001):</p>
+  <div class="tabell"><table>
+    <thead><tr><th>Paragraf</th><th>Krav</th></tr></thead>
+    <tbody>
+      <tr><td class="id">§ 1 Formål</td><td>Området er regulert til frittliggende boligbebyggelse (enebolig).</td></tr>
+      <tr><td class="id">§ 2 Utnyttelse</td><td>Bebygd areal (BYA) kan ikke overstige 30 % av tomtearealet.</td></tr>
+      <tr><td class="id">§ 3 Høyde</td><td>Mønehøyden kan ikke overstige 7,0 m over gjennomsnittlig planert terreng.</td></tr>
+      <tr><td class="id">§ 4 Byggegrenser</td><td>Byggegrensen er 6,0 m fra tomtegrensen mot Solbakken (offentlig vei i nord) og 4,0 m mot de andre tomtegrensene. Tiltak innenfor byggegrensen krever ikke dispensasjon.</td></tr>
+      <tr><td class="id">§ 5 Parkering</td><td>Hver bolig skal ha minst to parkeringsplasser på egen tomt.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Konklusjonen (<code>planKonklusjon</code> i <code>server.js</code>)</h3>
+  <div class="utfall kort">
+    <span class="m m-feil">avvik</span><span>når minst én paragraf har avvik.</span>
+    <span class="m m-usikker">usikkert</span><span>når ingen paragraf har avvik, men minst én er usikker.</span>
+    <span class="m m-ok">samsvar</span><span>ellers.</span>
+  </div>
+  <p>Når paragrafene vurderes i hvert sitt kall (oppsett med <code>bit</code>), er det koden som setter konklusjonen. Med <code>stoppVedFeil</code> stopper planvurderingen ved det første avviket, og konklusjonen blir <span class="m m-feil">avvik</span>. Planvurderingen er en anbefaling til saksbehandler, ikke et vedtak.</p>
+</section>
+
+<section id="hvem">
+  <h2>Hvem avgjør hva</h2>
+  <div class="tabell"><table>
+    <thead><tr><th>Punkter</th><th>Sekvensiell og <code>parallell</code></th><th><code>parallell-kode</code></th></tr></thead>
+    <tbody>
+      <tr><td>A1–A4, kategori</td><td><span class="m m-agent">agent</span></td><td><span class="m m-agent">agent</span></td></tr>
+      <tr><td>B1–B16</td><td><span class="m m-agent">agent</span></td><td><span class="m m-kode">kode</span> <code>formregler.js</code>, ut fra fakta agenten henter ut</td></tr>
+      <tr><td>C1–C13</td><td><span class="m m-agent">agent</span></td><td><span class="m m-agent">agent</span></td></tr>
+      <tr><td>D1–D12</td><td><span class="m m-agent">agent</span></td><td><span class="m m-agent">agent</span></td></tr>
+      <tr><td>D13</td><td><span class="m m-agent">agent</span></td><td><span class="m m-kode">kode</span></td></tr>
+      <tr><td>E1–E4</td><td><span class="m m-agent">agent</span></td><td><span class="m m-agent">agent</span></td></tr>
+      <tr><td>E5</td><td><span class="m m-agent">agent</span></td><td><span class="m m-kode">kode</span></td></tr>
+      <tr><td>M1–M10</td><td><span class="m m-kode">kode</span> <code>matrikkel.js</code></td><td><span class="m m-kode">kode</span></td></tr>
+      <tr><td>Port</td><td><span class="m m-kode">kode</span></td><td><span class="m m-kode">kode</span></td></tr>
+      <tr><td>Planvurdering</td><td><span class="m m-agent">agent</span>, som også setter konklusjonen etter regelen over</td><td><span class="m m-agent">agent</span> per paragraf, <span class="m m-kode">kode</span> setter konklusjonen</td></tr>
+    </tbody>
+  </table></div>
+</section>
+</main>
+</div>
+
+<script>
+  // Filtrerer radene i kontrollistene etter kategori og søketekst. Punkter som gjelder begge, vises alltid.
+  const knapper = document.querySelectorAll(".filter button");
+  const sok = document.getElementById("sok");
+  let kategori = "alle";
+  function oppdater() {
+    const ord = sok.value.trim().toLowerCase();
+    for (const rad of document.querySelectorAll("table.punkter tbody tr")) {
+      const gjelder = rad.dataset.gjelder;
+      const passer = kategori === "alle" || gjelder === "begge" || gjelder === kategori;
+      const treff = !ord || rad.textContent.toLowerCase().includes(ord);
+      rad.classList.toggle("skjult", !(passer && treff));
+    }
+  }
+  for (const knapp of knapper) {
+    knapp.addEventListener("click", () => {
+      kategori = knapp.dataset.filter;
+      for (const k of knapper) k.setAttribute("aria-pressed", String(k === knapp));
+      oppdater();
+    });
+  }
+  sok.addEventListener("input", oppdater);
+</script>
+</body>
+</html>

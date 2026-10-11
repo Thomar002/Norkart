@@ -1,0 +1,150 @@
+{
+  "sakId": "2026/201",
+  "versjon": "2026-10-11",
+  "beskrivelse": "Fasit for saken. Bare validatoren leser filen. Agenten får den aldri, og den vises først når brukeren ber om validering.",
+  "sammendrag": "En komplett søknad om tilbygg på 28 m² til eneboligen i Solbakken 7 (12/34). Formkontrollen og matrikkelkontrollen skal bestås uten mangler. Planvurderingen skal finne at tilbygget ligger 4,0 m fra tomtegrensen mot Solbakken, mens byggegrensen i § 4 er 6,0 m. Tiltaket krever derfor dispensasjon, selv om søknaden og nabovarselet sier at det ikke søkes om det.",
+  "kategori": {
+    "forventet": "endring",
+    "begrunnelse": "Tilbygg til den eksisterende eneboligen på eiendommen."
+  },
+  "opplysninger": {
+    "tiltakshaver": "Knut Solberg",
+    "kommune": "Hvileskjær",
+    "kommunenr": "8888",
+    "gnr": 12,
+    "bnr": 34,
+    "adresse": "Solbakken 7",
+    "postnr": "9998",
+    "poststed": "Hvileskjær",
+    "tomteareal": 800,
+    "byaFor": 120,
+    "tiltakBya": 28,
+    "planOppgitt": { "inneholder": "2019001" }
+  },
+  "punkter": {
+    "A1": { "forventet": "oppfylt", "begrunnelse": "Ett tiltak: tilbygg på 28 m² BYA til den eksisterende eneboligen (DOK-0001)." },
+    "A2": { "forventet": "oppfylt", "begrunnelse": "Knut Solberg søker selv. Det er ingen ansvarlig søker eller noe foretak (DOK-0001 del B og I)." },
+    "A3": { "forventet": "oppfylt", "begrunnelse": "BYA 28 m² og BRA 25 m². Tilbygget er i én etasje med eget tak mot nord og er ikke et påbygg (DOK-0001 del D, DOK-0003, DOK-0004)." },
+    "A4": { "forventet": "ikke_relevant", "begrunnelse": "Gjelder bare nybygg." },
+    "B1": { "forventet": "oppfylt", "begrunnelse": "Gnr. 12, bnr. 34. Festenummer og seksjonsnummer er «–» (DOK-0001 del A)." },
+    "B2": { "forventet": "oppfylt", "begrunnelse": "Hvileskjær (8888) (DOK-0001 del A)." },
+    "B3": { "forventet": "oppfylt", "begrunnelse": "Solbakken 7, 9998 Hvileskjær (DOK-0001 del A)." },
+    "B4": { "forventet": "oppfylt", "begrunnelse": "Knut Solberg (DOK-0001 del B)." },
+    "B5": { "forventet": "oppfylt", "begrunnelse": "Telefon og e-post er oppgitt. Han bor på byggeadressen, så det trengs ingen egen postadresse (DOK-0001 del B)." },
+    "B6": { "forventet": "oppfylt", "begrunnelse": "Søknaden sier hva som skal bygges (tilbygg i én etasje med saltak), hvor (vestre del av nordfasaden) og hva det skal brukes til (nytt soverom) (DOK-0001)." },
+    "B7": { "forventet": "oppfylt", "begrunnelse": "Reguleringsplan for Solbakken boligområde, plan-ID 8888/2019001 (DOK-0001 del C)." },
+    "B8": { "forventet": "oppfylt", "begrunnelse": "%BYA er krysset av (DOK-0001 del D)." },
+    "B9": { "forventet": "oppfylt", "begrunnelse": "Tomt 800 m², 156 m² før (120 m² bolig og 36 m² parkering), 184 m² etter, 23,0 % BYA (DOK-0001 del D). Regnestykket stemmer." },
+    "B10": { "forventet": "oppfylt", "begrunnelse": "BYA 28 m² og BRA 25 m² (DOK-0001 del D)." },
+    "B11": { "forventet": "oppfylt", "begrunnelse": "10,0 m til nabogrensen mot vest, 4,0 m til grensen mot veien, 8,0 m til midten av veien og 27,0 m til nærmeste bygning (DOK-0001 del E)." },
+    "B12": { "forventet": "oppfylt", "begrunnelse": "Alle spørsmålene i del F er besvart med nei. Stikkledningen 5,5 m øst for tilbygget er nevnt og berøres ikke (DOK-0001 del F)." },
+    "B13": { "forventet": "oppfylt", "begrunnelse": "Nei, den eksisterende avkjørselen brukes uendret (DOK-0001 del G)." },
+    "B14": { "forventet": "oppfylt", "begrunnelse": "Spørsmålet er besvart med nei (DOK-0001). Formkontrollen kontrollerer at søknaden svarer, ikke om svaret stemmer med planen. At dispensasjon faktisk trengs, er et planfunn (§ 4)." },
+    "B15": { "forventet": "oppfylt", "begrunnelse": "Del H lister seks vedlegg (D-1, E-1, E-2, E-3, C-1, C-2), og alle seks er sendt inn (DOK-0002 til DOK-0007)." },
+    "B16": { "forventet": "oppfylt", "begrunnelse": "Datert 2026-10-04 og signert av Knut Solberg (DOK-0001 del I)." },
+    "C1": { "forventet": "oppfylt", "begrunnelse": "Situasjonsplan S-01 er vedlagt som eget dokument (DOK-0002)." },
+    "C2": { "forventet": "oppfylt", "begrunnelse": "M 1:500 i tittelfeltet og målestokklinje 0–10 m (DOK-0002)." },
+    "C3": { "forventet": "oppfylt", "begrunnelse": "Nordpil nede til høyre (DOK-0002)." },
+    "C4": { "forventet": "oppfylt", "begrunnelse": "Eiendomsgrensen er tegnet og merket «12/34 · Solbakken 7 · 800 m²» (DOK-0002)." },
+    "C5": { "forventet": "oppfylt", "begrunnelse": "Tilbygget er gult og merket «NYTT 28 m²», eneboligen er grå, og tegnforklaringen skiller nytt fra eksisterende (DOK-0002)." },
+    "C6": { "forventet": "oppfylt", "begrunnelse": "7,0 × 4,0 m (DOK-0002)." },
+    "C7": { "forventet": "oppfylt", "begrunnelse": "10,0 m til nabogrensen mot vest, som er nærmeste nabogrense, målt fra yttervegg (DOK-0002)." },
+    "C8": { "forventet": "oppfylt", "begrunnelse": "«8,0 m til veimidte» (DOK-0002)." },
+    "C9": { "forventet": "oppfylt", "begrunnelse": "«27,0 m til bolig 12/35» (DOK-0002). Tilbygget er bygd sammen med eneboligen, så det finnes ingen avstand til andre bygninger på egen eiendom." },
+    "C10": { "forventet": "oppfylt", "begrunnelse": "To parkeringsplasser (P) er vist på egen tomt (DOK-0002)." },
+    "C11": { "forventet": "ikke_relevant", "godtatt": ["oppfylt"], "begrunnelse": "Avkjørselen er eksisterende og endres ikke (DOK-0001 del G). Den er likevel vist (DOK-0002), så oppfylt godtas også." },
+    "C12": { "forventet": "oppfylt", "godtatt": ["ikke_relevant"], "begrunnelse": "Den eksisterende stikkledningen er vist som «uendret» (DOK-0002). Tilbygget kobles ikke til og berører ikke ledningen, så ikke relevant godtas også." },
+    "C13": { "forventet": "ikke_relevant", "begrunnelse": "Søknaden svarer nei på høyspent (DOK-0001 del F)." },
+    "D1": { "forventet": "oppfylt", "begrunnelse": "Plantegningen viser hele 1. etasje med eksisterende og nytt areal (DOK-0003)." },
+    "D2": { "forventet": "ikke_relevant", "begrunnelse": "Gjelder bare nybygg." },
+    "D3": { "forventet": "oppfylt", "begrunnelse": "Snitt A–A (DOK-0004). Snittlinjen er markert på plantegningen (DOK-0003)." },
+    "D4": { "forventet": "oppfylt", "begrunnelse": "Fasadene mot nord, øst og vest er tegnet og merket med himmelretning. Fasaden mot sør endres ikke (DOK-0005)." },
+    "D5": { "forventet": "ikke_relevant", "begrunnelse": "Gjelder bare nybygg." },
+    "D6": { "forventet": "oppfylt", "begrunnelse": "Alle tegningene er i M 1:100 og situasjonsplanen i M 1:500 (DOK-0002 til DOK-0005)." },
+    "D7": { "forventet": "oppfylt", "begrunnelse": "Nytt er gult og eksisterende grått. Tegnforklaringen står på tegningene (DOK-0003, DOK-0004, DOK-0005)." },
+    "D8": { "forventet": "oppfylt", "begrunnelse": "Utvendige mål (7,0, 4,0, 15,0, 8,0 og 12,0 m) og romnavn (DOK-0003)." },
+    "D9": { "forventet": "oppfylt", "begrunnelse": "Tilbygget har møne 5,2 m og gesims 2,8 m, målt fra gjennomsnittlig ferdig planert terreng (DOK-0004, DOK-0005)." },
+    "D10": { "forventet": "oppfylt", "begrunnelse": "Ferdig planert terreng er heltrukket og eksisterende terreng stiplet, både i snittet og på fasadene (DOK-0004, DOK-0005)." },
+    "D11": { "forventet": "oppfylt", "begrunnelse": "Takvinkelen for tilbygget er 34° og for eneboligen 41° (DOK-0004)." },
+    "D12": { "forventet": "oppfylt", "begrunnelse": "S-01, A-01, A-02 og A-03 har alle tittelfelt med gnr/bnr, adresse, tiltakshaver, tiltak, tegningstype, tegningsnummer, målestokk og dato." },
+    "D13": { "forventet": "oppfylt", "begrunnelse": "Tilbygget er 7 × 4 m = 28 m², eneboligen 15 × 8 m = 120 m² og tomten 40 × 20 m = 800 m², og avstandene stemmer med del E. Parkeringen skal regnes med 18 m² per plass etter H-2300, selv om plassene er tegnet mindre. Det står i punktet." },
+    "E1": { "forventet": "oppfylt", "begrunnelse": "Nabovarselet er vedlagt. Det beskriver tilbygget og sier at det ikke søkes om dispensasjon (DOK-0006). Formkontrollen tar ikke stilling til om dispensasjon trengs." },
+    "E2": { "forventet": "oppfylt", "begrunnelse": "Kvitteringen viser at begge naboene (12/33 og 12/35) og begge gjenboerne (11/8 og 11/9) er varslet: personlig levering, e-post med lesebekreftelse og rekommandert brev (DOK-0007)." },
+    "E3": { "forventet": "oppfylt", "begrunnelse": "Varselet ble sendt 2026-09-14 og søknaden datert 2026-10-04, 20 dager senere (DOK-0006, DOK-0007, DOK-0001)." },
+    "E4": { "forventet": "oppfylt", "begrunnelse": "Det kom ingen merknader (DOK-0001 del H, DOK-0007)." },
+    "E5": { "forventet": "ikke_relevant", "godtatt": ["oppfylt"], "begrunnelse": "Tilbygget ligger 10,0 m fra nabogrensen. De 4,0 m mot Solbakken er avstand til veien, ikke til en nabogrense." },
+    "M1": { "forventet": "oppfylt", "begrunnelse": "Hvileskjær (8888)." },
+    "M2": { "forventet": "oppfylt", "begrunnelse": "12/34 finnes i matrikkelen." },
+    "M3": { "forventet": "oppfylt", "begrunnelse": "Solbakken 7 finnes i adresseregisteret." },
+    "M4": { "forventet": "oppfylt", "begrunnelse": "Solbakken 7 hører til 12/34." },
+    "M5": { "forventet": "oppfylt", "begrunnelse": "9998 Hvileskjær." },
+    "M6": { "forventet": "oppfylt", "begrunnelse": "800 m² i søknaden og i matrikkelen." },
+    "M7": { "forventet": "oppfylt", "begrunnelse": "120 m² for bygningene i søknaden og i matrikkelen. Parkeringen skal ikke være med i BYA før tiltaket." },
+    "M8": { "forventet": "oppfylt", "begrunnelse": "Eneboligen har bygningsnummer 300100034." },
+    "M9": { "forventet": "oppfylt", "begrunnelse": "Eiendommen er omfattet av 8888/2019001." },
+    "M10": { "forventet": "oppfylt", "begrunnelse": "Søknaden oppgir 8888/2019001." }
+  },
+  "port": {
+    "bestatt": true,
+    "begrunnelse": "Søknaden er komplett, og eiendomsopplysningene stemmer med matrikkelen. Saken skal gå videre til planvurdering."
+  },
+  "plan": {
+    "bestemmelser": {
+      "§ 1": { "forventet": "samsvar", "begrunnelse": "Tilbygg til en enebolig i et område regulert til frittliggende boligbebyggelse." },
+      "§ 2": { "forventet": "samsvar", "begrunnelse": "184 m² av 800 m² gir 23,0 % BYA med parkering. Grensen er 30 % (240 m²)." },
+      "§ 3": { "forventet": "samsvar", "begrunnelse": "Tilbygget har møne 5,2 m og eneboligen 6,5 m. Grensen er 7,0 m." },
+      "§ 4": { "forventet": "avvik", "begrunnelse": "Tilbygget ligger 4,0 m fra tomtegrensen mot Solbakken. Byggegrensen mot veien er 6,0 m, så tilbygget går 2,0 m forbi den. Mot vest er avstanden 10,0 m, og kravet der er 4,0 m." },
+      "§ 5": { "forventet": "samsvar", "begrunnelse": "To parkeringsplasser på egen tomt (DOK-0002)." }
+    },
+    "konklusjon": {
+      "forventet": "avvik",
+      "begrunnelse": "§ 4 har avvik. Tiltaket trenger dispensasjon fra byggegrensen, eller det må endres."
+    }
+  },
+  "funn": [
+    {
+      "id": "F1",
+      "kritisk": true,
+      "tekst": "Tilbygget ligger 4,0 m fra tomtegrensen mot Solbakken. Byggegrensen i § 4 er 6,0 m, så tiltaket er i strid med planen.",
+      "krav": [{ "punkt": "§ 4", "status": ["avvik"] }]
+    },
+    {
+      "id": "F2",
+      "kritisk": false,
+      "tekst": "Tiltaket trenger dispensasjon fra § 4, eller det må endres, selv om søknaden og nabovarselet sier at det ikke søkes om dispensasjon.",
+      "krav": [{ "punkt": "§ 4", "status": ["avvik"] }],
+      "nevner": { "punkter": ["§ 4"], "konklusjon": true, "ord": ["dispensasjon"] }
+    }
+  ],
+  "feller": [
+    {
+      "id": "L1",
+      "tekst": "Parkeringen regnes med 18 m² per plass (H-2300), selv om plassene er tegnet mindre. Arealene stemmer.",
+      "krav": [{ "punkt": "D13", "status": ["oppfylt"] }, { "punkt": "B9", "status": ["oppfylt"] }]
+    },
+    {
+      "id": "L2",
+      "tekst": "BYA før tiltaket er 120 m² for bygningene. 156 m² er med parkering.",
+      "krav": [{ "punkt": "M7", "status": ["oppfylt"] }]
+    },
+    {
+      "id": "L3",
+      "tekst": "De 4,0 m mot Solbakken er avstand til veien, ikke til en nabogrense. Det trengs ikke samtykke fra noen nabo.",
+      "krav": [{ "punkt": "E5", "status": ["ikke_relevant", "oppfylt"] }]
+    },
+    {
+      "id": "L4",
+      "tekst": "Fasaden mot sør endres ikke og skal ikke tegnes.",
+      "krav": [{ "punkt": "D4", "status": ["oppfylt"] }]
+    },
+    {
+      "id": "L5",
+      "tekst": "Formkontrollen kontrollerer at søknaden og nabovarselet svarer på spørsmålet om dispensasjon. At svaret er feil, er et planfunn og ikke en mangel ved søknaden.",
+      "krav": [{ "punkt": "B14", "status": ["oppfylt"] }, { "punkt": "E1", "status": ["oppfylt"] }]
+    }
+  ],
+  "merknader": [
+    "En dispensasjon fra § 4 krever en begrunnet søknad etter pbl § 19-1. Naboene må få nytt varsel som nevner dispensasjonen. Alternativt kan tilbygget gjøres høyst 2,0 m dypt eller flyttes.",
+    "Tilbygget skal brukes som soverom. Det er tillatt når tiltakshaver søker selv om tilbygg på inntil 50 m² (SAK10 § 3-1 bokstav a, Kristiansands informasjonsark «Tilbygg til bolig»)."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "beskrivelse": "Til skjermen. Hentet fra søkerens egne dokumenter. Agenten får ikke denne filen.",
+  "soker": { "navn": "Hilde Bakken", "rolle": "Tiltakshaver, søker selv", "eiendom": "12/35", "adresse": "Solbakken 11" },
+  "tiltak": { "eiendom": "12/35", "tekst": "Garasje 36 m² (skisse)", "x": 109, "y": 5, "b": 6, "d": 6, "kilde": "DOK-0012", "usikker": true },
+  "nabovarsel": {
+    "kilde": "DOK-0011",
+    "merknad": "«Naboene er informert muntlig.» Ingen kvittering er vedlagt.",
+    "mottakere": []
+  }
+}

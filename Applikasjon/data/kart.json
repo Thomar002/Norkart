@@ -1,0 +1,33 @@
+{
+  "syntetisk": true,
+  "beskrivelse": "Kartskisse over Solbakken til skjermen. Meter, x mot øst og y mot sør. Tomtene 12/33–12/36 har samme areal som i matrikkelen og samme mål som plankartet og situasjonsplanen (12/34 er 40 × 20 m). Agenten får ikke kartskissen.",
+  "veier": [{ "navn": "Solbakken", "x": -6, "y": -7, "b": 176, "d": 7 }],
+  "eiendommer": [
+    { "id": "12/33", "x": 0, "y": 0, "b": 39, "d": 20, "nummer": "5" },
+    { "id": "12/34", "x": 39, "y": 0, "b": 40, "d": 20, "nummer": "7" },
+    { "id": "12/35", "x": 79, "y": 0, "b": 38, "d": 20, "nummer": "9" },
+    { "id": "12/36", "x": 117, "y": 0, "b": 41, "d": 20, "nummer": "11" },
+    { "id": "11/7", "x": -4, "y": -27, "b": 34, "d": 20, "nummer": "4", "adresse": "Solbakken 4", "utenforMatrikkel": true },
+    { "id": "11/8", "x": 30, "y": -27, "b": 36, "d": 20, "nummer": "6", "adresse": "Solbakken 6", "utenforMatrikkel": true },
+    { "id": "11/9", "x": 66, "y": -27, "b": 36, "d": 20, "nummer": "8", "adresse": "Solbakken 8", "utenforMatrikkel": true },
+    { "id": "11/10", "x": 102, "y": -27, "b": 36, "d": 20, "nummer": "10", "adresse": "Solbakken 10", "utenforMatrikkel": true },
+    { "id": "11/11", "x": 138, "y": -27, "b": 32, "d": 20, "nummer": "12", "adresse": "Solbakken 12", "utenforMatrikkel": true }
+  ],
+  "bygninger": [
+    { "eiendom": "12/33", "bygningsnr": "300100033", "x": 6, "y": 7, "b": 14, "d": 8 },
+    { "eiendom": "12/34", "bygningsnr": "300100034", "x": 49, "y": 8, "b": 15, "d": 8 },
+    { "eiendom": "12/35", "bygningsnr": "300100035", "x": 83, "y": 8, "b": 16, "d": 8 },
+    { "eiendom": "11/7", "x": 6, "y": -20, "b": 13, "d": 9 },
+    { "eiendom": "11/8", "x": 41, "y": -21, "b": 14, "d": 9 },
+    { "eiendom": "11/9", "x": 77, "y": -20, "b": 13, "d": 10 },
+    { "eiendom": "11/10", "x": 112, "y": -21, "b": 15, "d": 9 },
+    { "eiendom": "11/11", "x": 146, "y": -20, "b": 13, "d": 9 }
+  ],
+  "traer": [[3, 17], [8, 3], [35, 17], [75, 17], [113, 3], [124, 9], [131, 15], [142, 6], [150, 16], [155, 4], [-2, -24], [62, -24], [99, -10], [134, -24], [167, -12]],
+  "planer": {
+    "8888/2019001": {
+      "omraade": ["12/33", "12/34", "12/35", "12/36"],
+      "byggegrense": { "motVei": 6, "ovrige": 4 }
+    }
+  }
+}
