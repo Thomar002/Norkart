@@ -75,10 +75,13 @@
 
     <div class="rutenett">
       <div class="venstre">
-        <section class="kort">
+        <section class="kort" id="kartKort">
           <div class="korthode">
             <h2>Kart over Solbakken</h2>
-            <div class="forklaring" id="kartforklaring"></div>
+            <div class="panelverktoy">
+              <div class="forklaring" id="kartforklaring"></div>
+              <button class="panelknapp" id="utvidKart" type="button" aria-expanded="false">⛶ Utvid</button>
+            </div>
           </div>
           <div id="kart" class="kart"></div>
           <p class="hint" id="karthint">Klikk på en eiendom for å se hva matrikkelen sier om den.</p>
@@ -111,6 +114,78 @@
         </div>
       </div>
       <ol id="logg" class="logg"></ol>
+    </section>
+
+    <section class="kort disp-kort" id="dispensasjonskort" hidden>
+      <div class="korthode">
+        <div>
+          <h2>Dispensasjonssimulering</h2>
+          <span class="hint">Søknad → nabovarsel → egen dispensasjonsvurdering</span>
+        </div>
+        <span class="merkelapp avvik">§ 4 · 2,0 m avvik</span>
+      </div>
+      <div class="banner info">
+        <strong>Planavvik funnet</strong>
+        Tilbygget går 2,0 m innenfor byggegrensen mot Solbakken. Søkeren oppga først at dispensasjon ikke trengs. Start nå et eget, simulert dispensasjonsløp.
+      </div>
+      <div class="disp-grunnlag">
+        <p><strong>Grunnlag:</strong> Reguleringsplan 8888/2019001, § 4 · DOK-0001 (søknad) og DOK-0002 (situasjonsplan).</p>
+      </div>
+      <div id="dispStart">
+        <p class="hint">Klikk for å opprette en søknad automatisk fra opplysningene i saken. Du kan redigere den før nabovarselet sendes.</p>
+        <button id="startDispensasjonslop" class="hoved" type="button">Søk dispensasjon</button>
+      </div>
+      <div id="dispFaseSoknad" hidden>
+        <h3>Dispensasjonssøknad fylt ut fra saken</h3>
+        <p class="hint">Kjente saksopplysninger fylles inn fra dokumentene. Manglende begrunnelser og alternativer står åpne for utfylling.</p>
+        <textarea id="dispSoknad" class="disp-utkast" rows="14" aria-label="Automatisk utfylt dispensasjonssøknad"></textarea>
+        <div class="disp-handlinger">
+          <button id="sendDispVarsel" class="hoved" type="button">Vis og send nabovarsel (simulert)</button>
+          <button id="kopierDispUtkast" class="sekundar" type="button">Kopier søknad</button>
+        </div>
+      </div>
+      <div id="dispFaseVarsel" hidden>
+        <h3>Nabovarsel sendt i simuleringen</h3>
+        <div id="dispVarselInfo" class="disp-grunnlag"></div>
+        <label class="disp-valg">Simulert svar fra naboer
+          <select id="dispNabosvar">
+            <option value="ingen">Ingen merknader innen fristen</option>
+            <option value="merknad">Én nabo protesterer på plasseringen</option>
+          </select>
+        </label>
+        <label id="dispMerknadFelt" class="disp-merknad" hidden>Nabomerknad
+          <textarea id="dispMerknad" rows="3">Naboen mener plasseringen nær veien vil påvirke utsyn og områdets karakter.</textarea>
+        </label>
+        <div class="disp-handlinger">
+          <button id="kjorDispVurdering" class="hoved" type="button">Kjør dispensasjonskontroll</button>
+          <span class="hint">Denne kjøringen vurderer bare dispensasjonssøknaden.</span>
+        </div>
+        <div id="dispVurdering" hidden>
+          <h3 id="dispAnbefaling"></h3>
+          <p id="dispBegrunnelseResultat"></p>
+          <div id="dispKriterier" class="disp-kriterier"></div>
+          <div id="dispMangler"></div>
+          <div id="dispTilleggssteg" hidden>
+            <button id="visDispTillegg" class="sekundar" type="button">Legg til faktiske opplysninger eller tegninger</button>
+            <div id="dispTilleggFase" hidden>
+              <h3>Legg ved grunnlaget AI-en etterspør</h3>
+              <p class="hint">Ingen nye mål, tegninger eller begrunnelser fylles inn automatisk. Skriv inn de faktiske opplysningene og legg ved tegninger fra saken.</p>
+              <label class="disp-merknad">Tilleggsopplysninger
+                <textarea id="dispTillegg" rows="7" placeholder="Skriv inn opplysningene som svarer på punktene over."></textarea>
+              </label>
+              <label class="disp-merknad">Tegninger og dokumentasjon
+                <input id="dispVedlegg" type="file" accept="image/png,image/jpeg,image/webp,application/pdf,.png,.jpg,.jpeg,.webp,.pdf" multiple>
+                <span class="hint">Legg ved PNG, JPG, WebP eller PDF. Maks 5 filer, 5 MB per fil og 22 MB samlet.</span>
+              </label>
+              <p id="dispVedleggListe" class="hint" aria-live="polite"></p>
+              <div class="disp-handlinger">
+                <button id="sendDispTillegg" class="hoved" type="button">Simuler nytt nabovarsel og vurder på nytt</button>
+              </div>
+            </div>
+          </div>
+          <p class="hint">Simulert AI-anbefaling til saksbehandler, ikke et vedtak. Vilkårene følger plan- og bygningsloven § 19-2.</p>
+        </div>
+      </div>
     </section>
   </main>
 

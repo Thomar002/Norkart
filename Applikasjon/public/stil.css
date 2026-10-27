@@ -339,6 +339,26 @@ details.raa summary { cursor: pointer; color: var(--dempet); }
 
 /* Validering mot fasit */
 #valideringskort { border: 2px solid var(--agent-lys); animation: inn .35s ease-out; }
+.disp-kort { border: 2px solid #c4b5fd; animation: inn .35s ease-out; }
+.disp-kort h2 { margin: 0; }
+.disp-grunnlag { padding: 2px 12px; background: #f8fafc; border-radius: 10px; font-size: 13px; line-height: 1.5; }
+.disp-grunnlag p { margin: 7px 0; }
+.disp-utkast { width: 100%; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font: inherit; font-weight: 400; line-height: 1.5; resize: vertical; }
+.disp-utkast:focus { outline: 2px solid #a78bfa; border-color: #7c3aed; }
+.disp-handlinger { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+.disp-utkast { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
+.disp-valg, .disp-merknad { display: grid; gap: 6px; margin-top: 14px; font-size: 13px; font-weight: 650; max-width: 680px; }
+.disp-merknad[hidden] { display: none; }
+.disp-valg select, .disp-merknad textarea { border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 10px; font: inherit; font-weight: 400; }
+.disp-kriterier { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
+.disp-kriterium { border: 1px solid var(--linje); border-radius: 9px; padding: 10px; display: grid; gap: 5px; font-size: 12.5px; }
+.disp-kriterium span { color: var(--agent); font-weight: 700; }
+.disp-sjekk { margin-top: 16px; padding: 12px 16px; border-radius: 10px; background: #fffbeb; color: #78350f; font-size: 13px; line-height: 1.5; }
+.disp-sjekk h3 { margin-top: 0; }
+.disp-sjekk ul { margin: 0; padding-left: 20px; }
+.disp-varseltekst { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow: auto; margin: 8px 0; padding: 12px; border: 1px solid var(--linje); border-radius: 8px; background: #fff; font: inherit; font-size: 12.5px; line-height: 1.5; }
+.disp-merknad input[type="file"] { max-width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; font: inherit; font-weight: 400; }
+@media (max-width: 700px) { .disp-kriterier { grid-template-columns: 1fr; } }
 .fasitmerke {
   display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 6px; font-size: 12px; font-weight: 800;
   background: #f1f5f9; color: #94a3b8;

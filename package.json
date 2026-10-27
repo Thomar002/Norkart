@@ -1,0 +1,16 @@
+{
+  "name": "norkart-byggesok",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Applikasjon for kontroll av byggesøknader",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "npm --prefix Applikasjon test",
+    "start": "npm --prefix Applikasjon start",
+    "tegn": "npm --prefix Applikasjon run tegn"
+  },
+  "license": "UNLICENSED"
+}

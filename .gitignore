@@ -1,3 +1,5 @@
 node_modules/
 .env
 .local/
+# Ekte saksdokumenter fra Kristiansands innsyn med personopplysninger, brukes bare som mønster
+kristiansand-maler/innsyn-eksempler/
