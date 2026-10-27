@@ -42,6 +42,7 @@
         <input type="checkbox" id="stopp" checked> <span>Stopp ved første feil</span>
       </label>
       <button id="kjor" class="hoved">▶ Kjør kontroll</button>
+      <button id="simuler" class="hoved" title="Kjør hele forløpet, inkludert dispensasjonssimulering for sak 2026/201">▶ Kjør simulering</button>
       <button id="valider" class="sekundar" disabled>✓ Valider mot fasit</button>
       <span class="opptak">
         <button id="spill" class="sekundar" title="Spill av forrige kjøring av denne saken uten å kalle modellen">↻ Spill av forrige</button>
@@ -105,17 +106,6 @@
       </section>
     </div>
 
-    <section class="kort" id="loggKort">
-      <div class="korthode">
-        <h2>Logg</h2>
-        <div class="panelverktoy">
-          <span class="hint" id="statuslinje"></span>
-          <button class="panelknapp" id="utvidLogg" type="button" aria-expanded="false">⛶ Utvid</button>
-        </div>
-      </div>
-      <ol id="logg" class="logg"></ol>
-    </section>
-
     <section class="kort disp-kort" id="dispensasjonskort" hidden>
       <div class="korthode">
         <div>
@@ -132,8 +122,7 @@
         <p><strong>Grunnlag:</strong> Reguleringsplan 8888/2019001, § 4 · DOK-0001 (søknad) og DOK-0002 (situasjonsplan).</p>
       </div>
       <div id="dispStart">
-        <p class="hint">Klikk for å opprette en søknad automatisk fra opplysningene i saken. Du kan redigere den før nabovarselet sendes.</p>
-        <button id="startDispensasjonslop" class="hoved" type="button">Søk dispensasjon</button>
+        <p class="hint">Velg «Kjør simulering» øverst for å kjøre kontroll, dispensasjonssøknad, nabovarsel og vurdering i ett forløp.</p>
       </div>
       <div id="dispFaseSoknad" hidden>
         <h3>Dispensasjonssøknad fylt ut fra saken</h3>
@@ -147,7 +136,7 @@
       <div id="dispFaseVarsel" hidden>
         <h3>Nabovarsel sendt i simuleringen</h3>
         <div id="dispVarselInfo" class="disp-grunnlag"></div>
-        <label class="disp-valg">Simulert svar fra naboer
+        <label class="disp-valg">Simulert svar fra naboer (velges tilfeldig)
           <select id="dispNabosvar">
             <option value="ingen">Ingen merknader innen fristen</option>
             <option value="merknad">Én nabo protesterer på plasseringen</option>
@@ -186,6 +175,17 @@
           <p class="hint">Simulert AI-anbefaling til saksbehandler, ikke et vedtak. Vilkårene følger plan- og bygningsloven § 19-2.</p>
         </div>
       </div>
+    </section>
+
+    <section class="kort" id="loggKort">
+      <div class="korthode">
+        <h2>Logg</h2>
+        <div class="panelverktoy">
+          <span class="hint" id="statuslinje"></span>
+          <button class="panelknapp" id="utvidLogg" type="button" aria-expanded="false">⛶ Utvid</button>
+        </div>
+      </div>
+      <ol id="logg" class="logg"></ol>
     </section>
   </main>
 
