@@ -124,15 +124,7 @@
       <div id="dispStart">
         <p class="hint">Velg «Kjør simulering» øverst for å kjøre kontroll, dispensasjonssøknad, nabovarsel og vurdering i ett forløp.</p>
       </div>
-      <div id="dispFaseSoknad" hidden>
-        <h3>Dispensasjonssøknad fylt ut fra saken</h3>
-        <p class="hint">Kjente saksopplysninger fylles inn fra dokumentene. Manglende begrunnelser og alternativer står åpne for utfylling.</p>
-        <textarea id="dispSoknad" class="disp-utkast" rows="14" aria-label="Automatisk utfylt dispensasjonssøknad"></textarea>
-        <div class="disp-handlinger">
-          <button id="sendDispVarsel" class="hoved" type="button">Vis og send nabovarsel (simulert)</button>
-          <button id="kopierDispUtkast" class="sekundar" type="button">Kopier søknad</button>
-        </div>
-      </div>
+      <textarea id="dispSoknad" hidden aria-hidden="true" tabindex="-1"></textarea>
       <div id="dispFaseVarsel" hidden>
         <h3>Nabovarsel sendt i simuleringen</h3>
         <div id="dispVarselInfo" class="disp-grunnlag"></div>
@@ -174,6 +166,17 @@
           </div>
           <p class="hint">Simulert AI-anbefaling til saksbehandler, ikke et vedtak. Vilkårene følger plan- og bygningsloven § 19-2.</p>
         </div>
+        <section id="simuleringsresultat" class="sim-resultat" hidden aria-live="polite">
+          <div class="korthode">
+            <h3>Sluttresultat for simuleringen</h3>
+            <span id="simResultatMerke" class="merkelapp"></span>
+          </div>
+          <p id="simResultatStatus"></p>
+          <dl id="simResultatDetaljer" class="sim-resultat-detaljer"></dl>
+          <div id="simResultatMangler"></div>
+          <div id="simResultatDokumenter" class="dokknapper"></div>
+          <p class="hint">Dette er en simulert anbefaling til saksbehandler, ikke et kommunalt vedtak.</p>
+        </section>
       </div>
     </section>
 

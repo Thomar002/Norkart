@@ -1104,8 +1104,6 @@ function fyllDispensasjonsutkast() {
     "DOK-0001 (søknad), DOK-0002 (situasjonsplan) og reguleringsplan 8888/2019001 § 4. DOK-0006 oppgir at det ikke ble søkt om dispensasjon i det opprinnelige nabovarselet. Dette er derfor en egen, simulert søknad og krever nytt nabovarsel i øvingsforløpet. Søkeropplysningene merket «syntetisk scenarioopplysning» er laget for simuleringen, ikke hentet fra dokumentene.",
   ].join("\n");
   $("#dispStart").hidden = true;
-  $("#dispFaseSoknad").hidden = false;
-  $("#dispSoknad").focus();
 }
 
 function velgTilfeldigNabosvar() {
@@ -1116,6 +1114,39 @@ function velgTilfeldigNabosvar() {
   return svar;
 }
 
+function lagUtvidbarTekst(tekst, visTekst, skjulTekst) {
+  const visning = el("pre", "disp-varseltekst begrenset", tekst);
+  const ramme = el("div", "disp-varseltekst-ramme", visning);
+  if (tekst.length > 180) {
+    const knapp = el("button", { type: "button", class: "disp-tekst-toggle", "aria-expanded": "false" }, visTekst);
+    knapp.addEventListener("click", () => {
+      const utvidet = visning.classList.toggle("utvidet");
+      visning.classList.toggle("begrenset", !utvidet);
+      knapp.setAttribute("aria-expanded", String(utvidet));
+      knapp.textContent = utvidet ? skjulTekst : visTekst;
+    });
+    ramme.append(knapp);
+  }
+  return ramme;
+}
+
+function lagSoknadOgNabovarsel(soknad, nabovarsel) {
+  let varseltekst = String(nabovarsel ?? "");
+  if (soknad) varseltekst = varseltekst.replace(soknad, "");
+  varseltekst = varseltekst.replace(/\n\nSimulert svar etter fristen:[\s\S]*$/, "").trim();
+  const start = varseltekst.indexOf("Varslet gjelder ");
+  if (start >= 0) varseltekst = varseltekst.slice(start);
+
+  return [
+    el("h4", "disp-dokumenttittel", "Dispensasjonssøknad fra Knut"),
+    el("p", "hint", "Søknaden som vurderes i dispensasjonsløpet."),
+    lagUtvidbarTekst(soknad, "Vis hele dispensasjonssøknaden", "Skjul dispensasjonssøknaden"),
+    el("h4", "disp-dokumenttittel", "Nabovarseltekst"),
+    el("p", "hint", "Meldingen som ble sendt til naboene i simuleringen."),
+    lagUtvidbarTekst(varseltekst, "Vis hele nabovarselteksten", "Skjul nabovarselteksten"),
+  ];
+}
+
 function sendSimulertNabovarsel() {
   const svar = velgTilfeldigNabosvar();
   const mottakere = t.sak.visning?.nabovarsel?.mottakere ?? [];
@@ -1123,13 +1154,11 @@ function sendSimulertNabovarsel() {
   $("#dispVarselInfo").replaceChildren(
     el("p", null, `Simulert sendt 27.10.2026 til ${mottakere.length} naboer/gjenboere: ${navn}.`),
     el("p", null, "Simuleringen lar merknadsfristen på to uker gå. Fristen er ute 10.11.2026."),
-    el("p", null, "Utkast til varsel bygger på søknadsteksten under og DOK-0001/DOK-0002. Kontroller at søknad og tegninger beskriver samme tiltak."),
-    el("pre", "disp-varseltekst", $("#dispSoknad").value),
+    ...lagSoknadOgNabovarsel($("#dispSoknad").value, lagNabovarselgrunnlag()),
     el("p", null, "Simulert nabosvar: " + (svar === "merknad" ? "Én nabo protesterer: " + $("#dispMerknad").value.trim() : "Ingen merknader innen fristen.")),
     el("p", null, "Ingen faktisk melding er sendt."),
   );
   $("#dispFaseVarsel").hidden = false;
-  $("#sendDispVarsel").hidden = true;
   $("#dispFaseVarsel").scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
@@ -1144,7 +1173,7 @@ const DISP_STATUS = {
   ikke_grunnlag: "Ikke nok grunnlag",
 };
 
-function visDispensasjonsvurdering(data) {
+function visDispensasjonsvurdering(data, nabo = {}) {
   const v = data.vurdering;
   t.dispMangler = v.mangler;
   const anbefaling = {
@@ -1167,15 +1196,51 @@ function visDispensasjonsvurdering(data) {
   $("#dispTilleggssteg").hidden = !trengerMer;
   if (!trengerMer) $("#dispTilleggFase").hidden = true;
   $("#dispVurdering").hidden = false;
+  visSimuleringsresultat(v, nabo);
   $("#dispVurdering").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function visSimuleringsresultat(v, nabo = {}) {
+  const anbefalinger = {
+    anbefal_innvilgelse: { tittel: "Anbefaling: Innvilg dispensasjonen", status: "oppfylt", neste: "AI-en anbefaler å innvilge dispensasjonen. Dette er anbefalingen i simuleringen, ikke et vedtak." },
+    anbefal_avslag: { tittel: "Anbefaling: Avslå dispensasjonen", status: "mangler", neste: "AI-en anbefaler avslag. Dette er anbefalingen i simuleringen, ikke et vedtak." },
+    be_om_mer: { tittel: "Anbefaling: Be om flere opplysninger", status: "uklart", neste: "Simuleringen avventer flere opplysninger før søknaden kan vurderes på nytt." },
+  };
+  const utfall = anbefalinger[v.anbefaling] ?? { tittel: "Anbefaling: Usikkert utfall", status: "uklart", neste: "AI-en kunne ikke gi en tydelig anbefaling på grunnlaget i simuleringen." };
+  const planHendelse = [...t.hendelser].reverse().find((h) => h.type === "konklusjon");
+  const nabosvar = nabo.nabosvar ?? $("#dispNabosvar").value;
+  const nabomerknad = nabo.nabomerknad ?? $("#dispMerknad").value;
+  const naboTekst = nabosvar === "merknad"
+    ? `Én nabo protesterte på plasseringen: ${nabomerknad || "ingen merknadstekst er oppgitt."}`
+    : "Ingen merknader innen fristen i dette øvingsscenarioet.";
+  const detaljer = $("#simResultatDetaljer");
+  const rad = (navn, verdi) => [el("dt", null, navn), el("dd", null, verdi)];
+
+  $("#simResultatMerke").className = `merkelapp ${utfall.status}`;
+  $("#simResultatMerke").textContent = utfall.tittel.replace("Anbefaling: ", "");
+  $("#simResultatStatus").textContent = utfall.neste;
+  detaljer.replaceChildren(...[
+    ...rad("Byggesakskontroll", planHendelse
+      ? `${statusTekst(planHendelse.konklusjon)}. ${planHendelse.oppsummering ?? ""}`
+      : "Planvurderingen finnes i gjennomgangen ovenfor."),
+    ...rad("Nabosvar", naboTekst),
+    ...rad("Hvorfor AI-en anbefaler dette", v.begrunnelse || "Ingen begrunnelse ble returnert."),
+  ]);
+
+  const mangler = $("#simResultatMangler");
+  mangler.replaceChildren(v.mangler?.length
+    ? el("div", "sim-resultat-mangler", el("strong", null, "Dette gjenstår"), el("ul", null, v.mangler.map((punkt) => el("li", null, punkt))))
+    : el("p", "hint", "Ingen flere opplysninger ble etterspurt i denne vurderingen."));
+
+  const dokumenter = dokKnapper(["DOK-0001", "DOK-0002", "DOK-0006"]);
+  $("#simResultatDokumenter").replaceChildren(...(dokumenter ? [...dokumenter.childNodes] : []));
+  $("#simuleringsresultat").hidden = false;
 }
 
 function visDispensasjonssteg(h) {
   $("#dispensasjonskort").hidden = false;
   $("#dispStart").hidden = true;
-  $("#sendDispVarsel").hidden = true;
   $("#kjorDispVurdering").hidden = true;
-  $("#dispFaseSoknad").hidden = false;
   $("#dispSoknad").value = h.soknad;
   $("#dispNabosvar").value = h.nabosvar === "merknad" ? "merknad" : "ingen";
   $("#dispNabosvar").disabled = true;
@@ -1197,7 +1262,7 @@ function visDispensasjonsvarsel(h) {
   const frist = h.oppdatertNabovarsel ? "25.11.2026" : "10.11.2026";
   $("#dispVarselInfo").replaceChildren(
     el("p", null, `Simulert ${h.oppdatertNabovarsel ? "nytt " : ""}nabovarsel ${dato} til ${mottakere.length} naboer/gjenboere: ${navn}. Fristen gikk ut ${frist}.`),
-    el("p", null, h.nabovarsel),
+    ...lagSoknadOgNabovarsel(h.soknad, h.nabovarsel),
     el("p", null, "Avspilling fra opptak. Ingen faktisk melding er sendt."),
   );
   $("#dispFaseVarsel").hidden = false;
@@ -1205,18 +1270,12 @@ function visDispensasjonsvarsel(h) {
 
 function spillDispensasjonsrunde(h) {
   visDispensasjonsvarsel(h);
-  visDispensasjonsvurdering({ vurdering: h.vurdering });
+  visDispensasjonsvurdering({ vurdering: h.vurdering }, h);
   logg(h.ms, "⚖️", `Opptak · dispensasjonskontroll · ${$("#dispAnbefaling").textContent}`, { klasse: "steg" });
 }
 
-$("#sendDispVarsel").addEventListener("click", sendSimulertNabovarsel);
 $("#dispNabosvar").addEventListener("change", () => {
   $("#dispMerknadFelt").hidden = $("#dispNabosvar").value !== "merknad";
-});
-$("#kopierDispUtkast").addEventListener("click", async () => {
-  await navigator.clipboard.writeText($("#dispSoknad").value);
-  $("#kopierDispUtkast").textContent = "Kopiert";
-  setTimeout(() => { $("#kopierDispUtkast").textContent = "Kopier søknad"; }, 1600);
 });
 function lagNabovarselgrunnlag({ oppdatert = false, vedlegg = [], tilleggsopplysninger = "" } = {}) {
   const mottakere = t.sak.visning?.nabovarsel?.mottakere ?? [];
@@ -1234,6 +1293,7 @@ async function vurderDispensasjon({ knapp, tilleggsopplysninger = "", vedlegg = 
   knapp.disabled = true;
   knapp.textContent = "AI-en vurderer dispensasjonen …";
   $("#dispVurdering").hidden = true;
+  $("#simuleringsresultat").hidden = true;
   try {
     const svar = await fetch(`/api/vurder-dispensasjon?sak=${encodeURIComponent(velg.value)}`, {
       method: "POST",
@@ -1326,7 +1386,7 @@ $("#sendDispTillegg").addEventListener("click", async () => {
     $("#dispVarselInfo").replaceChildren(
       el("p", null, `Simulert nytt nabovarsel 11.11.2026 til ${mottakere.length} naboer/gjenboere: ${mottakernavn}. Fristen settes til 25.11.2026.`),
       el("p", null, `Utkast til varsel bygger på søknaden, tilleggsopplysningene og ${filer.length ? `tegningene ${filer.map((f) => f.name).join(", ")}` : "de opprinnelige tegningene DOK-0001 og DOK-0002"}.`),
-      el("pre", "disp-varseltekst", `${$("#dispSoknad").value}\n\nTilleggsopplysninger fra søker:\n${tekst}`),
+      ...lagSoknadOgNabovarsel($("#dispSoknad").value, lagNabovarselgrunnlag({ oppdatert: true, vedlegg, tilleggsopplysninger: tekst })),
       el("p", null, "Simulert nabosvar: " + ($("#dispNabosvar").value === "merknad" ? "Én nabo protesterer: " + $("#dispMerknad").value.trim() : "Ingen merknader innen fristen.")),
       el("p", null, "Dette er bare en simulering. Ingen faktisk melding er sendt."),
     );
@@ -1532,11 +1592,10 @@ function nullstillKjoring() {
   $("#validering").replaceChildren();
   $("#dispensasjonskort").hidden = true;
   $("#dispStart").hidden = false;
-  $("#sendDispVarsel").hidden = false;
   $("#kjorDispVurdering").hidden = false;
-  $("#dispFaseSoknad").hidden = true;
   $("#dispFaseVarsel").hidden = true;
   $("#dispVurdering").hidden = true;
+  $("#simuleringsresultat").hidden = true;
   $("#dispTilleggssteg").hidden = true;
   $("#dispTilleggFase").hidden = true;
   $("#dispTillegg").value = "";
@@ -1548,7 +1607,6 @@ function nullstillKjoring() {
   $("#dispNabosvar").disabled = true;
   $("#dispMerknad").value = "Naboen mener plasseringen nær veien vil påvirke utsyn og områdets karakter.";
   $("#dispMerknadFelt").hidden = true;
-  $("#kopierDispUtkast").textContent = "Kopier utkast";
   $("#logg").replaceChildren();
   $("#banner").replaceChildren();
   $("#statuslinje").textContent = "";
