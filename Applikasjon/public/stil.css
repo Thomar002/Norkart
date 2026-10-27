@@ -364,6 +364,14 @@ details.raa summary { cursor: pointer; color: var(--dempet); }
 .sim-resultat-mangler { margin: 14px 0; padding: 12px 14px; border-radius: 9px; background: #fffbeb; color: #78350f; line-height: 1.5; }
 .sim-resultat-mangler ul { margin: 6px 0 0; padding-left: 20px; }
 .sim-resultat .hint { margin-bottom: 0; }
+.tidlig-resultat { border: 2px solid #c4b5fd; animation: inn .35s ease-out; }
+.tidlig-resultat h2 { margin: 0; }
+.tidlig-resultat > p { line-height: 1.5; }
+.tidlig-resultat h3 { margin: 14px 0 6px; font-size: 15px; }
+.tidlig-resultat details { margin-top: 12px; padding: 10px 12px; border-radius: 9px; background: #fffbeb; color: #78350f; }
+.tidlig-resultat details summary { cursor: pointer; font-weight: 650; }
+.tidlig-resultat details ul { margin: 8px 0 0; padding-left: 22px; }
+.tidlig-resultat .hint { margin-bottom: 0; }
 .disp-varseltekst-ramme { margin: 8px 0; }
 .disp-varseltekst { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; padding: 12px; border: 1px solid var(--linje); border-radius: 8px; background: #fff; font: inherit; font-size: 12.5px; line-height: 1.5; }
 .disp-varseltekst.begrenset { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }

@@ -42,7 +42,7 @@
         <input type="checkbox" id="stopp" checked> <span>Stopp ved første feil</span>
       </label>
       <button id="kjor" class="hoved">▶ Kjør kontroll</button>
-      <button id="simuler" class="hoved" title="Kjør hele forløpet, inkludert dispensasjonssimulering for sak 2026/201">▶ Kjør simulering</button>
+      <button id="simuler" class="hoved" title="Kjør hele simuleringsløpet for saken">▶ Kjør simulering</button>
       <button id="valider" class="sekundar" disabled>✓ Valider mot fasit</button>
       <span class="opptak">
         <button id="spill" class="sekundar" title="Spill av forrige kjøring av denne saken uten å kalle modellen">↻ Spill av forrige</button>
@@ -178,6 +178,15 @@
           <p class="hint">Dette er en simulert anbefaling til saksbehandler, ikke et kommunalt vedtak.</p>
         </section>
       </div>
+    </section>
+
+    <section class="kort tidlig-resultat" id="hildeSimResultat" hidden aria-live="polite">
+      <div class="korthode">
+        <h2>Sluttresultat for simuleringen</h2>
+        <span id="hildeResultatMerke" class="merkelapp"></span>
+      </div>
+      <p id="hildeResultatTekst"></p>
+      <div id="hildeResultatDetaljer"></div>
     </section>
 
     <section class="kort" id="loggKort">

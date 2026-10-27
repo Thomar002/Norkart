@@ -359,6 +359,11 @@ function ryddPunkt(p, a, kategori) {
   return { id: p.id, gruppe: p.gruppe, tekst: p.tekst, kilde: p.kilde, obligatorisk: p.obligatorisk, vurdering, status, funnet };
 }
 
+function uklareTegningerForSak(sak, punkter) {
+  if (sak.sakId !== "2026/202") return [];
+  return punkter.filter((p) => /^[CD]\d+$/.test(p.id) && p.obligatorisk && p.status === "uklart");
+}
+
 // Paragrafene i planbestemmelsene, f.eks. «**§ 2 Utnyttelse.**» -> { id: "§ 2", tittel: "Utnyttelse" }.
 export function planParagrafer(planTekst) {
   return [...planTekst.matchAll(/\*\*(§\s*\d+)\s+([^*]+?)\.\*\*/g)].map((m) => ({
@@ -585,9 +590,11 @@ export async function vurder(sakMappe, send, { stoppVedFeil = true, signal, opps
   const punkter = [...form.punkter.values()];
   const mangler = punkter.filter((p) => p.status === "mangler");
   const avvik = matPunkter.filter((p) => p.status === "avvik");
+  const uklareTegninger = uklareTegningerForSak(sak, punkter);
   const grunner = [];
   if (form.kategori === "uklart") grunner.push("Søknaden kunne ikke kategoriseres som endring eller nybygg.");
   if (mangler.length) grunner.push(`${mangler.length} punkt(er) mangler i formkontrollen.`);
+  if (uklareTegninger.length) grunner.push(`${uklareTegninger.length} obligatoriske tegningspunkt(er) er uklare.`);
   if (avvik.length) grunner.push(`${avvik.length} avvik mot matrikkelen eller planregisteret.`);
   if (stopp) grunner.push("Kontrollen stoppet ved første feil. Resten av punktene er ikke kontrollert.");
   const bestatt = grunner.length === 0;
@@ -595,7 +602,7 @@ export async function vurder(sakMappe, send, { stoppVedFeil = true, signal, opps
     type: "port",
     bestatt,
     grunner,
-    mangelliste: [...mangler, ...avvik].map((p) => `${p.id}: ${p.funnet}`),
+    mangelliste: [...mangler, ...uklareTegninger, ...avvik].map((p) => `${p.id}: ${p.funnet}`),
   });
 
   // Steg 3: planvurdering (agent)
@@ -848,14 +855,16 @@ async function vurderParallelt(sakMappe, send, { stoppVedFeil, signal, oppsett }
     const punkter = [...form.punkter.values()];
     const mangler = punkter.filter((p) => p.status === "mangler");
     const avvik = matPunkter.filter((p) => p.status === "avvik");
+    const uklareTegninger = uklareTegningerForSak(sak, punkter);
     const grunner = [];
     if (form.kategori === "uklart") grunner.push("Søknaden kunne ikke kategoriseres som endring eller nybygg.");
     if (mangler.length) grunner.push(`${mangler.length} punkt(er) mangler i formkontrollen.`);
+    if (uklareTegninger.length) grunner.push(`${uklareTegninger.length} obligatoriske tegningspunkt(er) er uklare.`);
     if (avvik.length) grunner.push(`${avvik.length} avvik mot matrikkelen eller planregisteret.`);
     if (stopp) grunner.push("Kontrollen stoppet ved første feil. Resten av punktene er ikke kontrollert.");
     if (!mat) grunner.push("Opplysningene ble ikke kontrollert mot matrikkelen.");
     port = { bestatt: grunner.length === 0, grunner };
-    send({ type: "port", ...port, mangelliste: [...mangler, ...avvik].map((p) => `${p.id}: ${p.funnet}`) });
+    send({ type: "port", ...port, mangelliste: [...mangler, ...uklareTegninger, ...avvik].map((p) => `${p.id}: ${p.funnet}`) });
     if (!port.bestatt) {
       planForkastet = true;
       planAvbryt.abort();

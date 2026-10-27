@@ -1055,6 +1055,8 @@ function ferdig(h) {
       klasse: "steg",
       klikk: () => $("#dispensasjonskort").scrollIntoView({ behavior: "smooth", block: "start" }),
     });
+  } else if (t.sak?.sakId === "2026/202") {
+    visHildeSimuleringsresultat(h);
   }
   const usd = `${tall(h.kostUsd, 4)} USD`;
   const nok = h.kostNok === null ? "" : ` ≈ ${tall(h.kostNok, 3)} kr`;
@@ -1063,6 +1065,57 @@ function ferdig(h) {
   $("#statuslinje").textContent = `${h.modell}${h.effort ? ` · ${oppsettTekst(h.effort, h.oppsett)}` : ""} · ${tall(h.tidSekunder, 1)} s · tokens inn ${tall(h.bruk.input_tokens)}, ut ${ut} · ${kost}`;
   logg(h.ms, "🏁", `Ferdig etter ${tall(h.tidSekunder, 1)} s · ${kost}`, { klasse: "steg", klikk: visAgent });
   oppdaterKnapper();
+}
+
+function visHildeSimuleringsresultat(h) {
+  const portHendelse = [...t.hendelser].reverse().find((e) => e.type === "port") ?? {};
+  const port = { ...portHendelse, ...(h.port ?? {}) };
+  const plan = h.planvurdering;
+  const tegningsmangler = [...t.resultat.values()].filter((p) =>
+    /^[CD]\d+$/.test(p.id) && ["mangler", "uklart", "avvik"].includes(p.status));
+  const trengerBedreGrunnlag = port.bestatt === false || tegningsmangler.length > 0;
+  const merke = $("#hildeResultatMerke");
+  const innhold = $("#hildeResultatDetaljer");
+
+  $("#hildeSimResultat").hidden = false;
+  if (trengerBedreGrunnlag) {
+    merke.className = "merkelapp uklart";
+    merke.textContent = "Be om flere opplysninger";
+    $("#hildeResultatTekst").textContent = "Hildes søknad går ikke videre til dispensasjonsvurdering. Simuleringen stopper her fordi søknaden eller tegningsgrunnlaget må kompletteres først.";
+    const liste = tegningsmangler.length
+      ? tegningsmangler
+      : (port.mangelliste ?? []).map((tekst) => ({ id: "", funnet: tekst }));
+    const punkter = liste.map((p) => el("li", null, p.id ? `${p.id}: ${p.funnet ?? "må avklares"}` : p.funnet));
+    const grunner = port.grunner?.length
+      ? el("p", null, port.grunner.join(" "))
+      : null;
+    innhold.replaceChildren(
+      el("h3", null, "Hvorfor stopper simuleringen her?"),
+      grunner,
+      punkter.length
+        ? el("details", null, el("summary", null, `Se hva som mangler eller er uklart (${punkter.length})`), el("ul", null, punkter))
+        : null,
+      el("p", "hint", "Dette scenarioet viser at tegningene må kompletteres før saken kan gå videre. Det blir ikke sendt nabovarsel eller laget dispensasjonssøknad i dette forløpet."),
+    );
+    return;
+  }
+
+  if (plan?.konklusjon === "avvik") {
+    merke.className = "merkelapp avvik";
+    merke.textContent = "Planavvik funnet";
+    $("#hildeResultatTekst").textContent = plan.oppsummering || "Planvurderingen fant et avvik. Saken må vurderes videre av saksbehandler.";
+    innhold.replaceChildren(el("p", "hint", "Dette simuleringsløpet stopper ved planvurderingen. Det oppretter ikke automatisk en dispensasjonssøknad for Hilde."));
+  } else if (plan?.konklusjon === "samsvar") {
+    merke.className = "merkelapp samsvar";
+    merke.textContent = "Planvurdering: samsvar";
+    $("#hildeResultatTekst").textContent = plan.oppsummering || "Kontrollen fant ikke planavvik. Saken går videre til ordinær saksbehandling.";
+    innhold.replaceChildren(el("p", "hint", "Det er ikke behov for dispensasjon i dette simuleringsløpet."));
+  } else {
+    merke.className = "merkelapp usikkert";
+    merke.textContent = "Krever saksbehandler";
+    $("#hildeResultatTekst").textContent = plan?.oppsummering || "Grunnlaget er ikke tilstrekkelig til å konkludere. Saken må vurderes videre av saksbehandler.";
+    innhold.replaceChildren(el("p", "hint", "Saksbehandler må avklare saken før et eventuelt dispensasjonsløp."));
+  }
 }
 
 // Sak 2026/201 demonstrerer at planvurderingen finner et dispensasjonsbehov
@@ -1591,6 +1644,7 @@ function nullstillKjoring() {
   $("#valideringskort").hidden = true;
   $("#validering").replaceChildren();
   $("#dispensasjonskort").hidden = true;
+  $("#hildeSimResultat").hidden = true;
   $("#dispStart").hidden = false;
   $("#kjorDispVurdering").hidden = false;
   $("#dispFaseVarsel").hidden = true;
@@ -1695,9 +1749,9 @@ async function kjor(url, init, fart = 1, { simulerDispensasjon = false } = {}) {
 }
 
 function oppdaterKnapper() {
-  const harDispensasjonslop = t.sak?.sakId === "2026/201";
-  kjorKnapp.hidden = harDispensasjonslop;
-  simulerKnapp.hidden = !harDispensasjonslop;
+  const harSimulering = ["2026/201", "2026/202"].includes(t.sak?.sakId);
+  kjorKnapp.hidden = harSimulering;
+  simulerKnapp.hidden = !harSimulering;
   kjorKnapp.textContent = t.kjorer ? "■ Avbryt" : "▶ Kjør kontroll";
   kjorKnapp.classList.toggle("sekundar", t.kjorer);
   kjorKnapp.classList.toggle("hoved", !t.kjorer);
