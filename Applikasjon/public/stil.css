@@ -341,6 +341,18 @@ details.raa summary { cursor: pointer; color: var(--dempet); }
 #valideringskort { border: 2px solid var(--agent-lys); animation: inn .35s ease-out; }
 .disp-kort { border: 2px solid #c4b5fd; animation: inn .35s ease-out; }
 .disp-kort h2 { margin: 0; }
+.disp-panel > summary, .sim-resultat > summary { list-style: none; cursor: pointer; }
+.disp-panel > summary::-webkit-details-marker, .sim-resultat > summary::-webkit-details-marker { display: none; }
+.disp-panel-hode { align-items: center; margin-bottom: 0; }
+.disp-panel[open] > .disp-panel-hode { margin-bottom: 10px; }
+.disp-panel-hode::after, .sim-resultat-hode::after {
+  content: "⌄"; flex: none; color: var(--dempet); font-size: 20px; font-weight: 700;
+  transition: transform .18s ease;
+}
+.disp-panel[open] > .disp-panel-hode::after, .sim-resultat[open] > .sim-resultat-hode::after { transform: rotate(180deg); }
+.disp-panel-hode:focus-visible, .sim-resultat-hode:focus-visible { outline: 3px solid #99f6e4; outline-offset: 4px; border-radius: 6px; }
+.disp-panel-hode > div { flex: 1; }
+.disp-panel-hode .hint { display: block; }
 .disp-grunnlag { padding: 2px 12px; background: #f8fafc; border-radius: 10px; font-size: 13px; line-height: 1.5; }
 .disp-grunnlag p { margin: 7px 0; }
 .disp-dokumenttittel { margin: 16px 0 2px; font-size: 15px; }
@@ -354,16 +366,18 @@ details.raa summary { cursor: pointer; color: var(--dempet); }
 .disp-sjekk { margin-top: 16px; padding: 12px 16px; border-radius: 10px; background: #fffbeb; color: #78350f; font-size: 13px; line-height: 1.5; }
 .disp-sjekk h3 { margin-top: 0; }
 .disp-sjekk ul { margin: 0; padding-left: 20px; }
-.sim-resultat { margin-top: 18px; padding: 16px; border: 1px solid #99f6e4; border-radius: 12px; background: #f0fdfa; animation: inn .3s ease-out; }
-.sim-resultat .korthode { align-items: center; margin-bottom: 8px; }
+.sim-resultat { display: block; margin-top: 18px; padding: 16px; border: 1px solid #99f6e4; border-radius: 12px; background: #f0fdfa; animation: inn .3s ease-out; }
+.sim-resultat[hidden] { display: none; }
+.sim-resultat-hode { align-items: center; margin-bottom: 0; }
+.sim-resultat[open] > .sim-resultat-hode { margin-bottom: 8px; }
 .sim-resultat h3 { margin: 0; }
-.sim-resultat > p { line-height: 1.5; }
+.sim-resultat-innhold > p { line-height: 1.5; }
 .sim-resultat-detaljer { display: grid; grid-template-columns: minmax(130px, 190px) 1fr; gap: 8px 14px; margin: 14px 0; }
 .sim-resultat-detaljer dt { color: var(--dempet); font-weight: 650; }
 .sim-resultat-detaljer dd { margin: 0; line-height: 1.5; }
 .sim-resultat-mangler { margin: 14px 0; padding: 12px 14px; border-radius: 9px; background: #fffbeb; color: #78350f; line-height: 1.5; }
 .sim-resultat-mangler ul { margin: 6px 0 0; padding-left: 20px; }
-.sim-resultat .hint { margin-bottom: 0; }
+.sim-resultat-innhold .hint { margin-bottom: 0; }
 .tidlig-resultat { border: 2px solid #c4b5fd; animation: inn .35s ease-out; }
 .tidlig-resultat h2 { margin: 0; }
 .tidlig-resultat > p { line-height: 1.5; }
@@ -417,6 +431,9 @@ details.raa summary { cursor: pointer; color: var(--dempet); }
 .vtabell tr.feil.alvorlig td { background: var(--feil-lys); }
 #validering details.raa { margin-top: 12px; }
 .fasitdel { margin-top: 18px; border-top: 2px dashed var(--agent-lys); }
+.disp-fasit-inline { padding-top: 4px; }
+.disp-fasit-inline > p { line-height: 1.5; }
+.disp-fasit-sammendrag { font-weight: 700; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

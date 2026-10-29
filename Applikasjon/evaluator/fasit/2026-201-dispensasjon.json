@@ -1,0 +1,92 @@
+{
+  "sakId": "2026/201",
+  "scenarioer": {
+    "flere": {
+      "sammendrag": "Flere naboer har sendt merknader. Merknadene skal vurderes, men påstandene dokumenterer ikke i seg selv de faktiske virkningene av tiltaket. Søknaden mangler fortsatt alternativ tegning og konkret dokumentasjon av virkningene av byggegrenseavviket.",
+      "punkter": {
+        "hensyn": {
+          "navn": "Hensyn bak byggegrensen",
+          "forventet": "usikkert",
+          "godtatt": ["usikkert"],
+          "begrunnelse": "Søknaden beskriver et avvik på 2,0 m, men dokumenterer ikke konkret hvordan tiltaket påvirker hensynene bak byggegrensen. Flere merknader er relevante partsinnspill, men beviser ikke alene virkningene."
+        },
+        "fordelerUlemper": {
+          "navn": "Fordeler mot ulemper",
+          "forventet": "usikkert",
+          "godtatt": ["usikkert"],
+          "begrunnelse": "Søkerens oppgitte fordeler er ikke dokumentert med alternativ tegning. Naboenes synspunkter skal inngå, men saken gir ikke nok grunnlag til å fastslå om fordelene er klart større enn ulempene."
+        },
+        "kommunaltSkjonn": {
+          "navn": "Kommunens skjønn",
+          "forventet": "ikke_grunnlag",
+          "godtatt": ["ikke_grunnlag"],
+          "begrunnelse": "Kommunens «kan»-skjønn kan ikke anbefales før de lovbestemte vilkårene er tilstrekkelig utredet."
+        },
+        "anbefaling": {
+          "navn": "Samlet anbefaling",
+          "forventet": "be_om_mer",
+          "godtatt": ["be_om_mer"],
+          "begrunnelse": "Be om dokumentasjon av virkninger og reelle alternativer før det gis en anbefaling om dispensasjon."
+        }
+      }
+    },
+    "en": {
+      "sammendrag": "Én nabo har sendt merknad. Merknaden skal vurderes, men påstanden dokumenterer ikke i seg selv de faktiske virkningene av tiltaket. Søknaden mangler fortsatt alternativ tegning og konkret dokumentasjon av virkningene av byggegrenseavviket.",
+      "punkter": {
+        "hensyn": {
+          "navn": "Hensyn bak byggegrensen",
+          "forventet": "usikkert",
+          "godtatt": ["usikkert"],
+          "begrunnelse": "Søknaden beskriver et avvik på 2,0 m, men dokumenterer ikke konkret hvordan tiltaket påvirker hensynene bak byggegrensen. Naboens merknad er et relevant partsinnspill, men beviser ikke alene virkningene."
+        },
+        "fordelerUlemper": {
+          "navn": "Fordeler mot ulemper",
+          "forventet": "usikkert",
+          "godtatt": ["usikkert"],
+          "begrunnelse": "Søkerens oppgitte fordeler er ikke dokumentert med alternativ tegning. Naboens synspunkt skal inngå, men saken gir ikke nok grunnlag til å fastslå om fordelene er klart større enn ulempene."
+        },
+        "kommunaltSkjonn": {
+          "navn": "Kommunens skjønn",
+          "forventet": "ikke_grunnlag",
+          "godtatt": ["ikke_grunnlag"],
+          "begrunnelse": "Kommunens «kan»-skjønn kan ikke anbefales før de lovbestemte vilkårene er tilstrekkelig utredet."
+        },
+        "anbefaling": {
+          "navn": "Samlet anbefaling",
+          "forventet": "be_om_mer",
+          "godtatt": ["be_om_mer"],
+          "begrunnelse": "Be om dokumentasjon av virkninger og reelle alternativer før det gis en anbefaling om dispensasjon."
+        }
+      }
+    },
+    "ingen": {
+      "sammendrag": "Ingen naboer har sendt merknader innen fristen. Fravær av merknader dokumenterer ikke at tiltaket er uten virkninger. Søknaden mangler fortsatt alternativ tegning og konkret dokumentasjon av virkningene av byggegrenseavviket.",
+      "punkter": {
+        "hensyn": {
+          "navn": "Hensyn bak byggegrensen",
+          "forventet": "usikkert",
+          "godtatt": ["usikkert"],
+          "begrunnelse": "Søknaden beskriver et avvik på 2,0 m, men dokumenterer ikke konkret hvordan tiltaket påvirker hensynene bak byggegrensen. Ingen nabomerknader er ikke dokumentasjon på at virkningene mangler."
+        },
+        "fordelerUlemper": {
+          "navn": "Fordeler mot ulemper",
+          "forventet": "usikkert",
+          "godtatt": ["usikkert"],
+          "begrunnelse": "Søkerens oppgitte fordeler er ikke dokumentert med alternativ tegning. Fravær av nabomerknader avgjør ikke om fordelene er klart større enn ulempene."
+        },
+        "kommunaltSkjonn": {
+          "navn": "Kommunens skjønn",
+          "forventet": "ikke_grunnlag",
+          "godtatt": ["ikke_grunnlag"],
+          "begrunnelse": "Kommunens «kan»-skjønn kan ikke anbefales før de lovbestemte vilkårene er tilstrekkelig utredet."
+        },
+        "anbefaling": {
+          "navn": "Samlet anbefaling",
+          "forventet": "be_om_mer",
+          "godtatt": ["be_om_mer"],
+          "begrunnelse": "Be om dokumentasjon av virkninger og reelle alternativer før det gis en anbefaling om dispensasjon."
+        }
+      }
+    }
+  }
+}

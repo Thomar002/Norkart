@@ -41,6 +41,14 @@
       <label class="bryter" title="Kontrollen avbrytes ved første punkt som gjør at søknaden ikke kan godkjennes">
         <input type="checkbox" id="stopp" checked> <span>Stopp ved første feil</span>
       </label>
+      <label class="velg" id="dispScenarioValg" hidden title="Velg hvilket syntetisk nabosvar dispensasjonssøknaden får">
+        Nabosvar
+        <select id="dispNabosvar">
+          <option value="flere">Flere naboer har merknader</option>
+          <option value="en">Én nabo har merknad</option>
+          <option value="ingen">Ingen merknader</option>
+        </select>
+      </label>
       <button id="kjor" class="hoved">▶ Kjør kontroll</button>
       <button id="simuler" class="hoved" title="Kjør hele simuleringsløpet for saken">▶ Kjør simulering</button>
       <button id="valider" class="sekundar" disabled>✓ Valider mot fasit</button>
@@ -107,13 +115,14 @@
     </div>
 
     <section class="kort disp-kort" id="dispensasjonskort" hidden>
-      <div class="korthode">
+      <details class="disp-panel">
+      <summary class="korthode disp-panel-hode">
         <div>
           <h2>Dispensasjonssimulering</h2>
           <span class="hint">Søknad → nabovarsel → egen dispensasjonsvurdering</span>
         </div>
         <span class="merkelapp avvik">§ 4 · 2,0 m avvik</span>
-      </div>
+      </summary>
       <div class="banner info">
         <strong>Planavvik funnet</strong>
         Tilbygget går 2,0 m innenfor byggegrensen mot Solbakken. Søkeren oppga først at dispensasjon ikke trengs. Start nå et eget, simulert dispensasjonsløp.
@@ -128,12 +137,6 @@
       <div id="dispFaseVarsel" hidden>
         <h3>Nabovarsel sendt i simuleringen</h3>
         <div id="dispVarselInfo" class="disp-grunnlag"></div>
-        <label class="disp-valg">Simulert svar fra naboer (velges tilfeldig)
-          <select id="dispNabosvar">
-            <option value="ingen">Ingen merknader innen fristen</option>
-            <option value="merknad">Én nabo protesterer på plasseringen</option>
-          </select>
-        </label>
         <label id="dispMerknadFelt" class="disp-merknad" hidden>Nabomerknad
           <textarea id="dispMerknad" rows="3">Naboen mener plasseringen nær veien vil påvirke utsyn og områdets karakter.</textarea>
         </label>
@@ -166,19 +169,23 @@
           </div>
           <p class="hint">Simulert AI-anbefaling til saksbehandler, ikke et vedtak. Vilkårene følger plan- og bygningsloven § 19-2.</p>
         </div>
-        <section id="simuleringsresultat" class="sim-resultat" hidden aria-live="polite">
-          <div class="korthode">
-            <h3>Sluttresultat for simuleringen</h3>
-            <span id="simResultatMerke" class="merkelapp"></span>
-          </div>
-          <p id="simResultatStatus"></p>
-          <dl id="simResultatDetaljer" class="sim-resultat-detaljer"></dl>
-          <div id="simResultatMangler"></div>
-          <div id="simResultatDokumenter" class="dokknapper"></div>
-          <p class="hint">Dette er en simulert anbefaling til saksbehandler, ikke et kommunalt vedtak.</p>
-        </section>
       </div>
+      </details>
     </section>
+
+    <details id="simuleringsresultat" class="sim-resultat" hidden aria-live="polite">
+      <summary class="korthode sim-resultat-hode">
+        <h3>Sluttresultat for simuleringen</h3>
+        <span id="simResultatMerke" class="merkelapp"></span>
+      </summary>
+      <div class="sim-resultat-innhold">
+        <p id="simResultatStatus"></p>
+        <dl id="simResultatDetaljer" class="sim-resultat-detaljer"></dl>
+        <div id="simResultatMangler"></div>
+        <div id="simResultatDokumenter" class="dokknapper"></div>
+        <p class="hint">Dette er en simulert anbefaling til saksbehandler, ikke et kommunalt vedtak.</p>
+      </div>
+    </details>
 
     <section class="kort tidlig-resultat" id="hildeSimResultat" hidden aria-live="polite">
       <div class="korthode">
