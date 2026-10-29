@@ -341,12 +341,22 @@ details.raa summary { cursor: pointer; color: var(--dempet); }
 #valideringskort { border: 2px solid var(--agent-lys); animation: inn .35s ease-out; }
 .disp-kort { border: 2px solid #c4b5fd; animation: inn .35s ease-out; }
 .disp-kort h2 { margin: 0; }
+.disp-panel > summary, .sim-resultat > summary { list-style: none; cursor: pointer; }
+.disp-panel > summary::-webkit-details-marker, .sim-resultat > summary::-webkit-details-marker { display: none; }
+.disp-panel-hode { align-items: center; margin-bottom: 0; }
+.disp-panel[open] > .disp-panel-hode { margin-bottom: 10px; }
+.disp-panel-hode::after, .sim-resultat-hode::after {
+  content: "⌄"; flex: none; color: var(--dempet); font-size: 20px; font-weight: 700;
+  transition: transform .18s ease;
+}
+.disp-panel[open] > .disp-panel-hode::after, .sim-resultat[open] > .sim-resultat-hode::after { transform: rotate(180deg); }
+.disp-panel-hode:focus-visible, .sim-resultat-hode:focus-visible { outline: 3px solid #99f6e4; outline-offset: 4px; border-radius: 6px; }
+.disp-panel-hode > div { flex: 1; }
+.disp-panel-hode .hint { display: block; }
 .disp-grunnlag { padding: 2px 12px; background: #f8fafc; border-radius: 10px; font-size: 13px; line-height: 1.5; }
 .disp-grunnlag p { margin: 7px 0; }
-.disp-utkast { width: 100%; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font: inherit; font-weight: 400; line-height: 1.5; resize: vertical; }
-.disp-utkast:focus { outline: 2px solid #a78bfa; border-color: #7c3aed; }
+.disp-dokumenttittel { margin: 16px 0 2px; font-size: 15px; }
 .disp-handlinger { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
-.disp-utkast { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
 .disp-valg, .disp-merknad { display: grid; gap: 6px; margin-top: 14px; font-size: 13px; font-weight: 650; max-width: 680px; }
 .disp-merknad[hidden] { display: none; }
 .disp-valg select, .disp-merknad textarea { border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 10px; font: inherit; font-weight: 400; }
@@ -356,9 +366,32 @@ details.raa summary { cursor: pointer; color: var(--dempet); }
 .disp-sjekk { margin-top: 16px; padding: 12px 16px; border-radius: 10px; background: #fffbeb; color: #78350f; font-size: 13px; line-height: 1.5; }
 .disp-sjekk h3 { margin-top: 0; }
 .disp-sjekk ul { margin: 0; padding-left: 20px; }
-.disp-varseltekst { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow: auto; margin: 8px 0; padding: 12px; border: 1px solid var(--linje); border-radius: 8px; background: #fff; font: inherit; font-size: 12.5px; line-height: 1.5; }
+.sim-resultat { display: block; margin-top: 18px; padding: 16px; border: 1px solid #99f6e4; border-radius: 12px; background: #f0fdfa; animation: inn .3s ease-out; }
+.sim-resultat[hidden] { display: none; }
+.sim-resultat-hode { align-items: center; margin-bottom: 0; }
+.sim-resultat[open] > .sim-resultat-hode { margin-bottom: 8px; }
+.sim-resultat h3 { margin: 0; }
+.sim-resultat-innhold > p { line-height: 1.5; }
+.sim-resultat-detaljer { display: grid; grid-template-columns: minmax(130px, 190px) 1fr; gap: 8px 14px; margin: 14px 0; }
+.sim-resultat-detaljer dt { color: var(--dempet); font-weight: 650; }
+.sim-resultat-detaljer dd { margin: 0; line-height: 1.5; }
+.sim-resultat-mangler { margin: 14px 0; padding: 12px 14px; border-radius: 9px; background: #fffbeb; color: #78350f; line-height: 1.5; }
+.sim-resultat-mangler ul { margin: 6px 0 0; padding-left: 20px; }
+.sim-resultat-innhold .hint { margin-bottom: 0; }
+.tidlig-resultat { border: 2px solid #c4b5fd; animation: inn .35s ease-out; }
+.tidlig-resultat h2 { margin: 0; }
+.tidlig-resultat > p { line-height: 1.5; }
+.tidlig-resultat h3 { margin: 14px 0 6px; font-size: 15px; }
+.tidlig-resultat details { margin-top: 12px; padding: 10px 12px; border-radius: 9px; background: #fffbeb; color: #78350f; }
+.tidlig-resultat details summary { cursor: pointer; font-weight: 650; }
+.tidlig-resultat details ul { margin: 8px 0 0; padding-left: 22px; }
+.tidlig-resultat .hint { margin-bottom: 0; }
+.disp-varseltekst-ramme { margin: 8px 0; }
+.disp-varseltekst { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; padding: 12px; border: 1px solid var(--linje); border-radius: 8px; background: #fff; font: inherit; font-size: 12.5px; line-height: 1.5; }
+.disp-varseltekst.begrenset { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+.disp-tekst-toggle { margin-top: 6px; padding: 3px 0; border: 0; background: transparent; color: var(--agent); font: inherit; font-size: 13px; font-weight: 650; text-decoration: underline; cursor: pointer; }
 .disp-merknad input[type="file"] { max-width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; font: inherit; font-weight: 400; }
-@media (max-width: 700px) { .disp-kriterier { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .disp-kriterier { grid-template-columns: 1fr; } .sim-resultat-detaljer { grid-template-columns: 1fr; gap: 3px; } .sim-resultat-detaljer dd { margin-bottom: 8px; } }
 .fasitmerke {
   display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 6px; font-size: 12px; font-weight: 800;
   background: #f1f5f9; color: #94a3b8;
@@ -398,6 +431,9 @@ details.raa summary { cursor: pointer; color: var(--dempet); }
 .vtabell tr.feil.alvorlig td { background: var(--feil-lys); }
 #validering details.raa { margin-top: 12px; }
 .fasitdel { margin-top: 18px; border-top: 2px dashed var(--agent-lys); }
+.disp-fasit-inline { padding-top: 4px; }
+.disp-fasit-inline > p { line-height: 1.5; }
+.disp-fasit-sammendrag { font-weight: 700; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

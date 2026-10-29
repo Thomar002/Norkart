@@ -7,6 +7,7 @@ import { kontrollerMatrikkel } from "./matrikkel.js";
 import { FAKTA_SKJEMA, kontrollerMaal, kontrollerNabogrense, kontrollerOpplysninger } from "./formregler.js";
 import { JsonStrom } from "./strom.js";
 import { valider } from "./evaluator/valider.js";
+import { validerDispensasjon } from "./evaluator/dispensasjon.js";
 
 const mappe = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT ?? 8730);
@@ -43,10 +44,12 @@ Skriv på norsk bokmål.`;
 const SYSTEM_PLAN = `Du er saksassistent i Hvileskjær kommune. Du skal vurdere om en byggesøknad er i samsvar med reguleringsplanen for eiendommen.
 
 Gå gjennom paragrafene i planbestemmelsene én og én, i rekkefølge. For hver paragraf skriver du:
-- kravet i planen
-- det søknaden oppgir, med dokument-ID
-- en kort begrunnelse der du sammenligner de to
+- kravet i planen, kort oppsummert
+- det relevante søknaden oppgir, med dokument-ID
+- én kort begrunnelse som sammenligner kravet og søknaden
 - vurderingen: samsvar, avvik, usikkert eller ikke_relevant (paragrafen sier ikke noe om dette tiltaket)
+
+Hold hvert felt kort. Begrunnelsen skal være høyst to korte setninger og normalt under 30 ord. Nevn hvert avgjørende mål bare én gang i begrunnelsen. Ikke gjenta opplysninger som allerede står i «kravet» eller «søknaden», og ikke gå gjennom samme måleforhold flere ganger med nye formuleringer. Oppsummeringen til slutt skal være høyst to setninger og bare nevne det avgjørende utfallet; ikke kopier begrunnelsen.
 
 Plankartet og tegningene er vedlagt som bilder. Les målene direkte fra dem, og sammenlign dem med planbestemmelsene. Eiendomsopplysningene fra matrikkelen er kontrollert og går foran tallene i søknaden.
 
@@ -359,6 +362,11 @@ function ryddPunkt(p, a, kategori) {
   return { id: p.id, gruppe: p.gruppe, tekst: p.tekst, kilde: p.kilde, obligatorisk: p.obligatorisk, vurdering, status, funnet };
 }
 
+function uklareTegningerForSak(sak, punkter) {
+  if (sak.sakId !== "2026/202") return [];
+  return punkter.filter((p) => /^[CD]\d+$/.test(p.id) && p.obligatorisk && p.status === "uklart");
+}
+
 // Paragrafene i planbestemmelsene, f.eks. «**§ 2 Utnyttelse.**» -> { id: "§ 2", tittel: "Utnyttelse" }.
 export function planParagrafer(planTekst) {
   return [...planTekst.matchAll(/\*\*(§\s*\d+)\s+([^*]+?)\.\*\*/g)].map((m) => ({
@@ -382,15 +390,15 @@ function planSkjema(paragrafer) {
           required: ["id", "krav", "soknad", "begrunnelse", "vurdering"],
           properties: {
             id: { type: "string", enum: paragrafer.map((p) => p.id) },
-            krav: { type: "string", description: "Kravet i planen." },
-            soknad: { type: "string", description: "Det søknaden oppgir, med dokument-ID." },
-            begrunnelse: { type: "string", description: "Sammenligningen av kravet og søknaden." },
+            krav: { type: "string", description: "Kort oppsummering av plankravet, helst én setning." },
+            soknad: { type: "string", description: "Relevant opplysning fra søknaden med dokument-ID, helst én setning." },
+            begrunnelse: { type: "string", description: "Kort sammenligning, høyst to setninger og normalt under 30 ord. Ikke gjenta samme mål eller fakta." },
             vurdering: { type: "string", enum: ["samsvar", "avvik", "usikkert", "ikke_relevant"] },
           },
         },
       },
       konklusjon: { type: "string", enum: ["samsvar", "avvik", "usikkert"] },
-      oppsummering: { type: "string", description: "To til fire setninger til saksbehandler." },
+      oppsummering: { type: "string", description: "Høyst to korte setninger til saksbehandler. Oppgi utfallet uten å gjenta begrunnelsen." },
     },
   };
 }
@@ -585,9 +593,11 @@ export async function vurder(sakMappe, send, { stoppVedFeil = true, signal, opps
   const punkter = [...form.punkter.values()];
   const mangler = punkter.filter((p) => p.status === "mangler");
   const avvik = matPunkter.filter((p) => p.status === "avvik");
+  const uklareTegninger = uklareTegningerForSak(sak, punkter);
   const grunner = [];
   if (form.kategori === "uklart") grunner.push("Søknaden kunne ikke kategoriseres som endring eller nybygg.");
   if (mangler.length) grunner.push(`${mangler.length} punkt(er) mangler i formkontrollen.`);
+  if (uklareTegninger.length) grunner.push(`${uklareTegninger.length} obligatoriske tegningspunkt(er) er uklare.`);
   if (avvik.length) grunner.push(`${avvik.length} avvik mot matrikkelen eller planregisteret.`);
   if (stopp) grunner.push("Kontrollen stoppet ved første feil. Resten av punktene er ikke kontrollert.");
   const bestatt = grunner.length === 0;
@@ -595,7 +605,7 @@ export async function vurder(sakMappe, send, { stoppVedFeil = true, signal, opps
     type: "port",
     bestatt,
     grunner,
-    mangelliste: [...mangler, ...avvik].map((p) => `${p.id}: ${p.funnet}`),
+    mangelliste: [...mangler, ...uklareTegninger, ...avvik].map((p) => `${p.id}: ${p.funnet}`),
   });
 
   // Steg 3: planvurdering (agent)
@@ -848,14 +858,16 @@ async function vurderParallelt(sakMappe, send, { stoppVedFeil, signal, oppsett }
     const punkter = [...form.punkter.values()];
     const mangler = punkter.filter((p) => p.status === "mangler");
     const avvik = matPunkter.filter((p) => p.status === "avvik");
+    const uklareTegninger = uklareTegningerForSak(sak, punkter);
     const grunner = [];
     if (form.kategori === "uklart") grunner.push("Søknaden kunne ikke kategoriseres som endring eller nybygg.");
     if (mangler.length) grunner.push(`${mangler.length} punkt(er) mangler i formkontrollen.`);
+    if (uklareTegninger.length) grunner.push(`${uklareTegninger.length} obligatoriske tegningspunkt(er) er uklare.`);
     if (avvik.length) grunner.push(`${avvik.length} avvik mot matrikkelen eller planregisteret.`);
     if (stopp) grunner.push("Kontrollen stoppet ved første feil. Resten av punktene er ikke kontrollert.");
     if (!mat) grunner.push("Opplysningene ble ikke kontrollert mot matrikkelen.");
     port = { bestatt: grunner.length === 0, grunner };
-    send({ type: "port", ...port, mangelliste: [...mangler, ...avvik].map((p) => `${p.id}: ${p.funnet}`) });
+    send({ type: "port", ...port, mangelliste: [...mangler, ...uklareTegninger, ...avvik].map((p) => `${p.id}: ${p.funnet}`) });
     if (!port.bestatt) {
       planForkastet = true;
       planAvbryt.abort();
@@ -1122,7 +1134,7 @@ async function lagreDispensasjonsrunde(req, res, sakMappe, stoppVedFeil, oppsett
   const steg = {
     soknad: input.soknad,
     nabovarsel: input.nabovarsel,
-    nabosvar: input.nabosvar === "merknad" ? "merknad" : "ingen",
+    nabosvar: ["flere", "en", "ingen"].includes(input.nabosvar) ? input.nabosvar : input.nabosvar === "merknad" ? "en" : "ingen",
     nabomerknad: typeof input.nabomerknad === "string" ? input.nabomerknad.slice(0, 2_000) : "",
     tilleggsopplysninger: typeof input.tilleggsopplysninger === "string" ? input.tilleggsopplysninger.slice(0, 30_000) : "",
     oppdatertNabovarsel: Boolean(input.oppdatertNabovarsel),
@@ -1133,7 +1145,7 @@ async function lagreDispensasjonsrunde(req, res, sakMappe, stoppVedFeil, oppsett
     { type: "disp-runde", ms: sisteMs + 3800, ...steg, vurdering: input.vurdering },
   ];
   await fs.appendFile(fil, `${hendelser.map((hendelse) => JSON.stringify(hendelse)).join("\n")}\n`);
-  return sendJson(res, 200, { lagret: true });
+  return sendJson(res, 200, { lagret: true, hendelser });
 }
 
 // Hvilke opptak som finnes for saken, f.eks. { "high-sekvensiell-stopp": true, "max-parallell-hele": false, ... }.
@@ -1233,7 +1245,7 @@ async function lesKropp(req, maks = 20_000_000) {
   return Buffer.concat(biter).toString("utf8");
 }
 
-async function kjorDispensasjonsvurdering(req, res, sakMappe) {
+async function kjorDispensasjonsvurdering(req, res, sakMappe, effort = STANDARD_OPPSETT.effort) {
   if (sakMappe !== "2026-201") return sendJson(res, 404, { feil: "Dispensasjonssimuleringen finnes bare for sak 2026-201." });
   if (!process.env.ANTHROPIC_API_KEY) {
     return sendJson(res, 400, { feil: "ANTHROPIC_API_KEY er ikke satt i miljøet der serveren kjører." });
@@ -1301,7 +1313,7 @@ async function kjorDispensasjonsvurdering(req, res, sakMappe) {
     kall = await kallModell(klient, SYSTEM_DISPENSASJON, grunnlag, {
       type: "json_schema",
       schema: DISPENSASJONSSKJEMA,
-    }, { effort: "high" });
+    }, { effort });
   } catch (feil) {
     console.error("Dispensasjonsvurderingen feilet:", feil);
     return sendJson(res, 502, { feil: "AI-vurderingen feilet. Prøv dispensasjonskontrollen igjen." });
@@ -1387,7 +1399,7 @@ async function handter(req, res) {
 
   const stoppVedFeil = url.searchParams.get("stopp") !== "0";
   let oppsett = STANDARD_OPPSETT;
-  if (url.pathname === "/api/vurder" || url.pathname === "/api/opptak") {
+  if (url.pathname === "/api/vurder" || url.pathname === "/api/opptak" || url.pathname === "/api/valider") {
     try {
       oppsett = lagOppsett(url.searchParams.get("effort") ?? STANDARD_OPPSETT.effort, url.searchParams.get("kjoring") ?? "sekvensiell");
     } catch (feil) {
@@ -1401,7 +1413,13 @@ async function handter(req, res) {
   }
 
   if (req.method === "POST" && url.pathname === "/api/vurder-dispensasjon") {
-    return kjorDispensasjonsvurdering(req, res, url.searchParams.get("sak"));
+    let effort = STANDARD_OPPSETT.effort;
+    try {
+      effort = lagOppsett(url.searchParams.get("effort") ?? STANDARD_OPPSETT.effort, "sekvensiell").effort;
+    } catch (feil) {
+      return sendJson(res, 400, { feil: feil.message });
+    }
+    return kjorDispensasjonsvurdering(req, res, url.searchParams.get("sak"), effort);
   }
 
   if (req.method === "POST" && url.pathname === "/api/opptak/dispensasjonsrunde") {
@@ -1428,7 +1446,25 @@ async function handter(req, res) {
     }
     if (!Array.isArray(hendelser)) return sendJson(res, 400, { feil: "Kroppen må være JSON med listen «hendelser»." });
     try {
-      return sendJson(res, 200, valider(fasit, hendelser, await lesJson("data", "sjekkliste.json")));
+      const resultat = valider(fasit, hendelser, await lesJson("data", "sjekkliste.json"));
+      let dispHendelse = [...hendelser].reverse().find((h) => h.type === "disp-runde");
+      if (!dispHendelse && sakMappe === "2026-201") {
+        const start = hendelser.find((h) => h.type === "start");
+        if (start) {
+          const oppsett = start.oppsett ?? lagOppsett(start.effort ?? STANDARD_OPPSETT.effort, "sekvensiell");
+          const kjoring = !oppsett.parallell ? "sekvensiell" : oppsett.kode ? "parallell-kode" : "parallell";
+          const effort = start.effort ?? oppsett.effort ?? STANDARD_OPPSETT.effort;
+          const stopp = typeof start.stoppVedFeil === "boolean" ? start.stoppVedFeil : stoppVedFeil;
+          const fil = opptakFil(sakMappe, stopp, lagOppsett(effort, kjoring));
+          const linjer = (await fs.readFile(fil, "utf8").catch(() => "")).trim().split("\n").filter(Boolean);
+          dispHendelse = linjer.reverse().map((linje) => JSON.parse(linje)).find((h) => h.type === "disp-runde");
+        }
+      }
+      if (dispHendelse) {
+        const dispFasit = await lesJson("evaluator", "fasit", "2026-201-dispensasjon.json");
+        resultat.dispensasjon = validerDispensasjon(dispFasit, dispHendelse);
+      }
+      return sendJson(res, 200, resultat);
     } catch (feil) {
       return sendJson(res, 400, { feil: feil.message });
     }

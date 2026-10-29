@@ -870,7 +870,7 @@ function kortTekst(tekst, n = 110) {
 // Hendelsene fra serveren
 
 // Hendelsene validatoren trenger. Resten (tekst som skrives, tanker) sendes ikke.
-const TIL_VALIDERING = new Set(["start", "kategori", "opplysninger", "punkt", "port", "stopp", "bestemmelse", "konklusjon", "ferdig"]);
+const TIL_VALIDERING = new Set(["start", "kategori", "opplysninger", "punkt", "port", "stopp", "bestemmelse", "konklusjon", "ferdig", "disp-runde"]);
 
 function behandle(h) {
   t.sisteMs = h.ms ?? t.sisteMs;
@@ -1055,6 +1055,8 @@ function ferdig(h) {
       klasse: "steg",
       klikk: () => $("#dispensasjonskort").scrollIntoView({ behavior: "smooth", block: "start" }),
     });
+  } else if (t.sak?.sakId === "2026/202") {
+    visHildeSimuleringsresultat(h);
   }
   const usd = `${tall(h.kostUsd, 4)} USD`;
   const nok = h.kostNok === null ? "" : ` ≈ ${tall(h.kostNok, 3)} kr`;
@@ -1065,12 +1067,64 @@ function ferdig(h) {
   oppdaterKnapper();
 }
 
+function visHildeSimuleringsresultat(h) {
+  const portHendelse = [...t.hendelser].reverse().find((e) => e.type === "port") ?? {};
+  const port = { ...portHendelse, ...(h.port ?? {}) };
+  const plan = h.planvurdering;
+  const tegningsmangler = [...t.resultat.values()].filter((p) =>
+    /^[CD]\d+$/.test(p.id) && ["mangler", "uklart", "avvik"].includes(p.status));
+  const trengerBedreGrunnlag = port.bestatt === false || tegningsmangler.length > 0;
+  const merke = $("#hildeResultatMerke");
+  const innhold = $("#hildeResultatDetaljer");
+
+  $("#hildeSimResultat").hidden = false;
+  if (trengerBedreGrunnlag) {
+    merke.className = "merkelapp uklart";
+    merke.textContent = "Be om flere opplysninger";
+    $("#hildeResultatTekst").textContent = "Hildes søknad går ikke videre til dispensasjonsvurdering. Simuleringen stopper her fordi søknaden eller tegningsgrunnlaget må kompletteres først.";
+    const liste = tegningsmangler.length
+      ? tegningsmangler
+      : (port.mangelliste ?? []).map((tekst) => ({ id: "", funnet: tekst }));
+    const punkter = liste.map((p) => el("li", null, p.id ? `${p.id}: ${p.funnet ?? "må avklares"}` : p.funnet));
+    const grunner = port.grunner?.length
+      ? el("p", null, port.grunner.join(" "))
+      : null;
+    innhold.replaceChildren(
+      el("h3", null, "Hvorfor stopper simuleringen her?"),
+      grunner,
+      punkter.length
+        ? el("details", null, el("summary", null, `Se hva som mangler eller er uklart (${punkter.length})`), el("ul", null, punkter))
+        : null,
+      el("p", "hint", "Dette scenarioet viser at tegningene må kompletteres før saken kan gå videre. Det blir ikke sendt nabovarsel eller laget dispensasjonssøknad i dette forløpet."),
+    );
+    return;
+  }
+
+  if (plan?.konklusjon === "avvik") {
+    merke.className = "merkelapp avvik";
+    merke.textContent = "Planavvik funnet";
+    $("#hildeResultatTekst").textContent = plan.oppsummering || "Planvurderingen fant et avvik. Saken må vurderes videre av saksbehandler.";
+    innhold.replaceChildren(el("p", "hint", "Dette simuleringsløpet stopper ved planvurderingen. Det oppretter ikke automatisk en dispensasjonssøknad for Hilde."));
+  } else if (plan?.konklusjon === "samsvar") {
+    merke.className = "merkelapp samsvar";
+    merke.textContent = "Planvurdering: samsvar";
+    $("#hildeResultatTekst").textContent = plan.oppsummering || "Kontrollen fant ikke planavvik. Saken går videre til ordinær saksbehandling.";
+    innhold.replaceChildren(el("p", "hint", "Det er ikke behov for dispensasjon i dette simuleringsløpet."));
+  } else {
+    merke.className = "merkelapp usikkert";
+    merke.textContent = "Krever saksbehandler";
+    $("#hildeResultatTekst").textContent = plan?.oppsummering || "Grunnlaget er ikke tilstrekkelig til å konkludere. Saken må vurderes videre av saksbehandler.";
+    innhold.replaceChildren(el("p", "hint", "Saksbehandler må avklare saken før et eventuelt dispensasjonsløp."));
+  }
+}
+
 // Sak 2026/201 demonstrerer at planvurderingen finner et dispensasjonsbehov
 // selv om søkeren har krysset av for at dispensasjon ikke trengs.
 function visDispensasjonsmulighet() {
   const kort = $("#dispensasjonskort");
   const tilgjengelig = t.sak?.sakId === "2026/201" && Boolean(t.plan) && Boolean(t.ferdig);
   kort.hidden = !tilgjengelig;
+  $("#dispScenarioValg").hidden = t.sak?.sakId !== "2026/201";
   return tilgjengelig;
 }
 
@@ -1104,32 +1158,66 @@ function fyllDispensasjonsutkast() {
     "DOK-0001 (søknad), DOK-0002 (situasjonsplan) og reguleringsplan 8888/2019001 § 4. DOK-0006 oppgir at det ikke ble søkt om dispensasjon i det opprinnelige nabovarselet. Dette er derfor en egen, simulert søknad og krever nytt nabovarsel i øvingsforløpet. Søkeropplysningene merket «syntetisk scenarioopplysning» er laget for simuleringen, ikke hentet fra dokumentene.",
   ].join("\n");
   $("#dispStart").hidden = true;
-  $("#dispFaseSoknad").hidden = false;
-  $("#dispSoknad").focus();
 }
 
-function velgTilfeldigNabosvar() {
-  const svar = Math.random() < 0.5 ? "ingen" : "merknad";
-  $("#dispNabosvar").value = svar;
-  $("#dispNabosvar").disabled = true;
-  $("#dispMerknadFelt").hidden = svar !== "merknad";
-  return svar;
+const DISP_NABOSVAR = {
+  flere: "Flere naboer har sendt merknader: én nabo er bekymret for trafikk og sikt, og en annen for utsyn og områdets karakter.",
+  en: "Én nabo har sendt merknad og er bekymret for plasseringen nær veien og virkningen på utsyn og områdets karakter.",
+  ingen: "Ingen naboer har sendt merknader innen fristen.",
+};
+
+function nabosvarTekst(svar = $("#dispNabosvar").value, merknad = $("#dispMerknad").value.trim()) {
+  if (svar === "flere") return DISP_NABOSVAR.flere;
+  if (svar === "en") return `Én nabo har sendt merknad: ${merknad || DISP_NABOSVAR.en}`;
+  return DISP_NABOSVAR.ingen;
+}
+
+function lagUtvidbarTekst(tekst, visTekst, skjulTekst) {
+  const visning = el("pre", "disp-varseltekst begrenset", tekst);
+  const ramme = el("div", "disp-varseltekst-ramme", visning);
+  if (tekst.length > 180) {
+    const knapp = el("button", { type: "button", class: "disp-tekst-toggle", "aria-expanded": "false" }, visTekst);
+    knapp.addEventListener("click", () => {
+      const utvidet = visning.classList.toggle("utvidet");
+      visning.classList.toggle("begrenset", !utvidet);
+      knapp.setAttribute("aria-expanded", String(utvidet));
+      knapp.textContent = utvidet ? skjulTekst : visTekst;
+    });
+    ramme.append(knapp);
+  }
+  return ramme;
+}
+
+function lagSoknadOgNabovarsel(soknad, nabovarsel) {
+  let varseltekst = String(nabovarsel ?? "");
+  if (soknad) varseltekst = varseltekst.replace(soknad, "");
+  varseltekst = varseltekst.replace(/\n\nSimulert svar etter fristen:[\s\S]*$/, "").trim();
+  const start = varseltekst.indexOf("Varslet gjelder ");
+  if (start >= 0) varseltekst = varseltekst.slice(start);
+
+  return [
+    el("h4", "disp-dokumenttittel", "Dispensasjonssøknad fra Knut"),
+    el("p", "hint", "Søknaden som vurderes i dispensasjonsløpet."),
+    lagUtvidbarTekst(soknad, "Vis hele dispensasjonssøknaden", "Skjul dispensasjonssøknaden"),
+    el("h4", "disp-dokumenttittel", "Nabovarseltekst"),
+    el("p", "hint", "Meldingen som ble sendt til naboene i simuleringen."),
+    lagUtvidbarTekst(varseltekst, "Vis hele nabovarselteksten", "Skjul nabovarselteksten"),
+  ];
 }
 
 function sendSimulertNabovarsel() {
-  const svar = velgTilfeldigNabosvar();
+  const svar = $("#dispNabosvar").value;
+  $("#dispMerknadFelt").hidden = svar !== "en";
   const mottakere = t.sak.visning?.nabovarsel?.mottakere ?? [];
   const navn = mottakere.map((m) => `${m.navn} (${m.eiendom})`).join(", ") || "Naboer og gjenboere";
   $("#dispVarselInfo").replaceChildren(
     el("p", null, `Simulert sendt 27.10.2026 til ${mottakere.length} naboer/gjenboere: ${navn}.`),
     el("p", null, "Simuleringen lar merknadsfristen på to uker gå. Fristen er ute 10.11.2026."),
-    el("p", null, "Utkast til varsel bygger på søknadsteksten under og DOK-0001/DOK-0002. Kontroller at søknad og tegninger beskriver samme tiltak."),
-    el("pre", "disp-varseltekst", $("#dispSoknad").value),
-    el("p", null, "Simulert nabosvar: " + (svar === "merknad" ? "Én nabo protesterer: " + $("#dispMerknad").value.trim() : "Ingen merknader innen fristen.")),
+    ...lagSoknadOgNabovarsel($("#dispSoknad").value, lagNabovarselgrunnlag()),
+    el("p", null, "Simulert nabosvar: " + nabosvarTekst(svar)),
     el("p", null, "Ingen faktisk melding er sendt."),
   );
   $("#dispFaseVarsel").hidden = false;
-  $("#sendDispVarsel").hidden = true;
   $("#dispFaseVarsel").scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
@@ -1142,9 +1230,12 @@ const DISP_STATUS = {
   kan_vurderes: "Kan vurderes videre",
   bør_ikke_gis: "Bør ikke gis",
   ikke_grunnlag: "Ikke nok grunnlag",
+  anbefal_innvilgelse: "Anbefal innvilgelse",
+  anbefal_avslag: "Anbefal avslag",
+  be_om_mer: "Be om mer",
 };
 
-function visDispensasjonsvurdering(data) {
+function visDispensasjonsvurdering(data, nabo = {}) {
   const v = data.vurdering;
   t.dispMangler = v.mangler;
   const anbefaling = {
@@ -1167,20 +1258,53 @@ function visDispensasjonsvurdering(data) {
   $("#dispTilleggssteg").hidden = !trengerMer;
   if (!trengerMer) $("#dispTilleggFase").hidden = true;
   $("#dispVurdering").hidden = false;
+  visSimuleringsresultat(v, nabo);
   $("#dispVurdering").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function visSimuleringsresultat(v, nabo = {}) {
+  const anbefalinger = {
+    anbefal_innvilgelse: { tittel: "Anbefaling: Innvilg dispensasjonen", status: "oppfylt", neste: "AI-en anbefaler å innvilge dispensasjonen. Dette er anbefalingen i simuleringen, ikke et vedtak." },
+    anbefal_avslag: { tittel: "Anbefaling: Avslå dispensasjonen", status: "mangler", neste: "AI-en anbefaler avslag. Dette er anbefalingen i simuleringen, ikke et vedtak." },
+    be_om_mer: { tittel: "Anbefaling: Be om flere opplysninger", status: "uklart", neste: "Simuleringen avventer flere opplysninger før søknaden kan vurderes på nytt." },
+  };
+  const utfall = anbefalinger[v.anbefaling] ?? { tittel: "Anbefaling: Usikkert utfall", status: "uklart", neste: "AI-en kunne ikke gi en tydelig anbefaling på grunnlaget i simuleringen." };
+  const planHendelse = [...t.hendelser].reverse().find((h) => h.type === "konklusjon");
+  const nabosvar = nabo.nabosvar ?? $("#dispNabosvar").value;
+  const nabomerknad = nabo.nabomerknad ?? $("#dispMerknad").value;
+  const naboTekst = nabosvarTekst(nabosvar, nabomerknad);
+  const detaljer = $("#simResultatDetaljer");
+  const rad = (navn, verdi) => [el("dt", null, navn), el("dd", null, verdi)];
+
+  $("#simResultatMerke").className = `merkelapp ${utfall.status}`;
+  $("#simResultatMerke").textContent = utfall.tittel.replace("Anbefaling: ", "");
+  $("#simResultatStatus").textContent = utfall.neste;
+  detaljer.replaceChildren(...[
+    ...rad("Byggesakskontroll", planHendelse
+      ? `${statusTekst(planHendelse.konklusjon)}. ${planHendelse.oppsummering ?? ""}`
+      : "Planvurderingen finnes i gjennomgangen ovenfor."),
+    ...rad("Nabosvar", naboTekst),
+    ...rad("Hvorfor AI-en anbefaler dette", v.begrunnelse || "Ingen begrunnelse ble returnert."),
+  ]);
+
+  const mangler = $("#simResultatMangler");
+  mangler.replaceChildren(v.mangler?.length
+    ? el("div", "sim-resultat-mangler", el("strong", null, "Dette gjenstår"), el("ul", null, v.mangler.map((punkt) => el("li", null, punkt))))
+    : el("p", "hint", "Ingen flere opplysninger ble etterspurt i denne vurderingen."));
+
+  const dokumenter = dokKnapper(["DOK-0001", "DOK-0002", "DOK-0006"]);
+  $("#simResultatDokumenter").replaceChildren(...(dokumenter ? [...dokumenter.childNodes] : []));
+  $("#simuleringsresultat").hidden = false;
 }
 
 function visDispensasjonssteg(h) {
   $("#dispensasjonskort").hidden = false;
   $("#dispStart").hidden = true;
-  $("#sendDispVarsel").hidden = true;
   $("#kjorDispVurdering").hidden = true;
-  $("#dispFaseSoknad").hidden = false;
   $("#dispSoknad").value = h.soknad;
-  $("#dispNabosvar").value = h.nabosvar === "merknad" ? "merknad" : "ingen";
-  $("#dispNabosvar").disabled = true;
+  $("#dispNabosvar").value = ["flere", "en", "ingen"].includes(h.nabosvar) ? h.nabosvar : h.nabosvar === "merknad" ? "en" : "ingen";
+  $("#dispMerknadFelt").hidden = $("#dispNabosvar").value !== "en";
   if (typeof h.nabomerknad === "string") $("#dispMerknad").value = h.nabomerknad;
-  $("#dispMerknadFelt").hidden = $("#dispNabosvar").value !== "merknad";
   $("#dispFaseVarsel").hidden = true;
   $("#dispVurdering").hidden = true;
   if (h.tilleggsopplysninger) {
@@ -1197,7 +1321,7 @@ function visDispensasjonsvarsel(h) {
   const frist = h.oppdatertNabovarsel ? "25.11.2026" : "10.11.2026";
   $("#dispVarselInfo").replaceChildren(
     el("p", null, `Simulert ${h.oppdatertNabovarsel ? "nytt " : ""}nabovarsel ${dato} til ${mottakere.length} naboer/gjenboere: ${navn}. Fristen gikk ut ${frist}.`),
-    el("p", null, h.nabovarsel),
+    ...lagSoknadOgNabovarsel(h.soknad, h.nabovarsel),
     el("p", null, "Avspilling fra opptak. Ingen faktisk melding er sendt."),
   );
   $("#dispFaseVarsel").hidden = false;
@@ -1205,25 +1329,18 @@ function visDispensasjonsvarsel(h) {
 
 function spillDispensasjonsrunde(h) {
   visDispensasjonsvarsel(h);
-  visDispensasjonsvurdering({ vurdering: h.vurdering });
+  visDispensasjonsvurdering({ vurdering: h.vurdering }, h);
+  $("#kjorDispVurdering").hidden = false;
   logg(h.ms, "⚖️", `Opptak · dispensasjonskontroll · ${$("#dispAnbefaling").textContent}`, { klasse: "steg" });
 }
 
-$("#sendDispVarsel").addEventListener("click", sendSimulertNabovarsel);
 $("#dispNabosvar").addEventListener("change", () => {
-  $("#dispMerknadFelt").hidden = $("#dispNabosvar").value !== "merknad";
-});
-$("#kopierDispUtkast").addEventListener("click", async () => {
-  await navigator.clipboard.writeText($("#dispSoknad").value);
-  $("#kopierDispUtkast").textContent = "Kopiert";
-  setTimeout(() => { $("#kopierDispUtkast").textContent = "Kopier søknad"; }, 1600);
+  $("#dispMerknadFelt").hidden = $("#dispNabosvar").value !== "en";
 });
 function lagNabovarselgrunnlag({ oppdatert = false, vedlegg = [], tilleggsopplysninger = "" } = {}) {
   const mottakere = t.sak.visning?.nabovarsel?.mottakere ?? [];
   const navn = mottakere.map((m) => `${m.navn} (${m.eiendom})`).join(", ") || "Naboer og gjenboere";
-  const utfall = $("#dispNabosvar").value === "merknad"
-    ? `Én nabo har protestert: ${$("#dispMerknad").value.trim() || "begrunnelsen er ikke oppgitt."}`
-    : "Ingen merknader er mottatt innen fristen i dette øvingsscenarioet.";
+  const utfall = nabosvarTekst();
   const sendt = oppdatert ? "11.11.2026" : "27.10.2026";
   const frist = oppdatert ? "25.11.2026" : "10.11.2026";
   const vedleggstekst = vedlegg.length ? vedlegg.map((v) => v.name).join(", ") : "DOK-0001 og DOK-0002";
@@ -1234,6 +1351,7 @@ async function vurderDispensasjon({ knapp, tilleggsopplysninger = "", vedlegg = 
   knapp.disabled = true;
   knapp.textContent = "AI-en vurderer dispensasjonen …";
   $("#dispVurdering").hidden = true;
+  $("#simuleringsresultat").hidden = true;
   try {
     const svar = await fetch(`/api/vurder-dispensasjon?sak=${encodeURIComponent(velg.value)}`, {
       method: "POST",
@@ -1243,7 +1361,7 @@ async function vurderDispensasjon({ knapp, tilleggsopplysninger = "", vedlegg = 
     const data = await svar.json();
     if (!svar.ok) throw new Error(data.feil ?? "Kunne ikke vurdere dispensasjonssøknaden.");
     visDispensasjonsvurdering(data);
-    $("#kjorDispVurdering").hidden = true;
+    $("#kjorDispVurdering").hidden = false;
     const opptakParametre = new URLSearchParams({
       sak: velg.value,
       stopp: t.stoppVedFeil ? "1" : "0",
@@ -1264,6 +1382,13 @@ async function vurderDispensasjon({ knapp, tilleggsopplysninger = "", vedlegg = 
       }),
     });
     if (!lagring.ok) console.warn("Dispensasjonsrunden ble ikke lagt til i opptaket:", (await lagring.json()).feil);
+    else {
+      const lagret = await lagring.json();
+      if (Array.isArray(lagret.hendelser)) {
+        t.hendelser.push(...lagret.hendelser);
+        t.sisteMs = Math.max(t.sisteMs, ...lagret.hendelser.map((h) => Number(h.ms) || 0));
+      }
+    }
     logg(t.sisteMs, "⚖️", `Dispensasjonskontroll ferdig · ${$("#dispAnbefaling").textContent}`, { klasse: "steg" });
   } catch (feil) {
     $("#kjorDispVurdering").hidden = false;
@@ -1320,14 +1445,13 @@ $("#sendDispTillegg").addEventListener("click", async () => {
   }
   try {
     const vedlegg = await vedleggSomData(filer);
-    velgTilfeldigNabosvar();
     const mottakere = t.sak.visning?.nabovarsel?.mottakere ?? [];
     const mottakernavn = mottakere.map((m) => `${m.navn} (${m.eiendom})`).join(", ") || "naboer/gjenboere i saken";
     $("#dispVarselInfo").replaceChildren(
       el("p", null, `Simulert nytt nabovarsel 11.11.2026 til ${mottakere.length} naboer/gjenboere: ${mottakernavn}. Fristen settes til 25.11.2026.`),
       el("p", null, `Utkast til varsel bygger på søknaden, tilleggsopplysningene og ${filer.length ? `tegningene ${filer.map((f) => f.name).join(", ")}` : "de opprinnelige tegningene DOK-0001 og DOK-0002"}.`),
-      el("pre", "disp-varseltekst", `${$("#dispSoknad").value}\n\nTilleggsopplysninger fra søker:\n${tekst}`),
-      el("p", null, "Simulert nabosvar: " + ($("#dispNabosvar").value === "merknad" ? "Én nabo protesterer: " + $("#dispMerknad").value.trim() : "Ingen merknader innen fristen.")),
+      ...lagSoknadOgNabovarsel($("#dispSoknad").value, lagNabovarselgrunnlag({ oppdatert: true, vedlegg, tilleggsopplysninger: tekst })),
+      el("p", null, "Simulert nabosvar: " + nabosvarTekst()),
       el("p", null, "Dette er bare en simulering. Ingen faktisk melding er sendt."),
     );
     vurderDispensasjon({ knapp: $("#sendDispTillegg"), tilleggsopplysninger: tekst, vedlegg, oppdatertNabovarsel: true });
@@ -1364,7 +1488,13 @@ async function validerKjoring() {
   validerKnapp.disabled = true;
   validerKnapp.textContent = "Validerer …";
   try {
-    const svar = await fetch(`/api/valider?sak=${encodeURIComponent(velg.value)}`, {
+    const params = new URLSearchParams({
+      sak: velg.value,
+      effort: effortVelg.value,
+      kjoring: kjoringVelg.value,
+      stopp: stoppBryter.checked ? "1" : "0",
+    });
+    const svar = await fetch(`/api/valider?${params}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ hendelser: t.hendelser }),
@@ -1413,6 +1543,9 @@ function visValidering(v) {
     v.plan?.konklusjon
       ? flis(statusTekst(v.plan.konklusjon.faktisk), `planvurdering · fasit ${statusTekst(v.plan.konklusjon.forventet).toLowerCase()}`, v.plan.konklusjon.faktisk ? ja(v.plan.konklusjon.riktig) : "")
       : null,
+    v.dispensasjon
+      ? flis(`${v.dispensasjon.tall.riktig}/${v.dispensasjon.tall.vurdert}`, `dispensasjon · ${v.dispensasjon.scenarioTekst.toLowerCase()}`, v.dispensasjon.resultat === "bestatt" ? "ok" : "feil")
+      : null,
     v.stopp ? flis(v.stopp.id, v.stopp.legitimt ? "stoppet riktig" : "stoppet feil", ja(v.stopp.legitimt)) : null,
   );
 
@@ -1457,12 +1590,14 @@ function visValidering(v) {
         feller ? el("h4", null, "Feller agenten ikke skulle gå i") : null,
         feller,
       ),
-      el("div", null,
-        el("h4", null, "Fasiten for saken"),
-        el("p", null, v.sammendrag),
-        v.merknader.length ? el("ul", "vmerknader", v.merknader.map((m) => el("li", null, m))) : null,
-        avvikende.length ? el("div", null, el("h4", null, "Punkter som avviker fra fasiten"), punktTabell(avvikende)) : null,
-      ),
+      v.dispensasjon
+        ? lagDispensasjonsfasit(v.dispensasjon)
+        : el("div", null,
+          el("h4", null, "Fasiten for saken"),
+          el("p", null, v.sammendrag),
+          v.merknader.length ? el("ul", "vmerknader", v.merknader.map((m) => el("li", null, m))) : null,
+          avvikende.length ? el("div", null, el("h4", null, "Punkter som avviker fra fasiten"), punktTabell(avvikende)) : null,
+        ),
     ),
     el("details", "raa", el("summary", null, `Alle ${v.punkter.length} punkter mot fasiten`), punktTabell(v.punkter)),
     el("details", "raa", el("summary", null, "Eiendomsopplysningene mot fasiten"), opplysninger),
@@ -1470,6 +1605,23 @@ function visValidering(v) {
   $("#valideringskort").hidden = false;
   merkGjennomgang(v);
   $("#valideringskort").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function lagDispensasjonsfasit(v) {
+  const status = (verdi) => DISP_STATUS[verdi] ?? verdi ?? "Ikke returnert";
+  const punkter = v.punkter.map((punkt) => {
+    const farge = punkt.riktig ? "ok" : punkt.id === "kommunaltSkjonn" ? "usikker" : "feil";
+    return el("div", `vflis ${farge}`,
+      el("strong", null, status(punkt.faktisk)),
+      el("span", null, `${punkt.navn} · fasit ${status(punkt.forventet)}`),
+    );
+  });
+  return el("div", "disp-fasit-inline",
+    el("h4", null, "Fasiten for dispensasjon"),
+    el("p", "disp-fasit-sammendrag", `${v.oppsummering} Scenario: ${v.scenarioTekst}.`),
+    el("p", "hint", v.sammendrag),
+    el("div", "vfliser", punkter),
+  );
 }
 
 // Setter et lite merke på hver rad i gjennomgangen: stemmer punktet med fasiten?
@@ -1531,12 +1683,13 @@ function nullstillKjoring() {
   $("#valideringskort").hidden = true;
   $("#validering").replaceChildren();
   $("#dispensasjonskort").hidden = true;
+  $("#dispScenarioValg").hidden = true;
+  $("#hildeSimResultat").hidden = true;
   $("#dispStart").hidden = false;
-  $("#sendDispVarsel").hidden = false;
   $("#kjorDispVurdering").hidden = false;
-  $("#dispFaseSoknad").hidden = true;
   $("#dispFaseVarsel").hidden = true;
   $("#dispVurdering").hidden = true;
+  $("#simuleringsresultat").hidden = true;
   $("#dispTilleggssteg").hidden = true;
   $("#dispTilleggFase").hidden = true;
   $("#dispTillegg").value = "";
@@ -1544,11 +1697,9 @@ function nullstillKjoring() {
   $("#dispVedleggListe").textContent = "";
   $("#sendDispTillegg").disabled = false;
   $("#dispSoknad").value = "";
-  $("#dispNabosvar").value = "ingen";
-  $("#dispNabosvar").disabled = true;
+  $("#dispNabosvar").value = "flere";
   $("#dispMerknad").value = "Naboen mener plasseringen nær veien vil påvirke utsyn og områdets karakter.";
   $("#dispMerknadFelt").hidden = true;
-  $("#kopierDispUtkast").textContent = "Kopier utkast";
   $("#logg").replaceChildren();
   $("#banner").replaceChildren();
   $("#statuslinje").textContent = "";
@@ -1586,7 +1737,10 @@ async function tomKo() {
 }
 
 async function kjor(url, init, fart = 1, { simulerDispensasjon = false } = {}) {
+  const valgtNabosvar = $("#dispNabosvar").value;
   nullstillKjoring();
+  $("#dispNabosvar").value = valgtNabosvar;
+  $("#dispMerknadFelt").hidden = valgtNabosvar !== "en";
   ko = [];
   t.fart = fart;
   t.kjorer = true;
@@ -1637,9 +1791,10 @@ async function kjor(url, init, fart = 1, { simulerDispensasjon = false } = {}) {
 }
 
 function oppdaterKnapper() {
-  const harDispensasjonslop = t.sak?.sakId === "2026/201";
-  kjorKnapp.hidden = harDispensasjonslop;
-  simulerKnapp.hidden = !harDispensasjonslop;
+  const harSimulering = ["2026/201", "2026/202"].includes(t.sak?.sakId);
+  $("#dispScenarioValg").hidden = t.sak?.sakId !== "2026/201";
+  kjorKnapp.hidden = harSimulering;
+  simulerKnapp.hidden = !harSimulering;
   kjorKnapp.textContent = t.kjorer ? "■ Avbryt" : "▶ Kjør kontroll";
   kjorKnapp.classList.toggle("sekundar", t.kjorer);
   kjorKnapp.classList.toggle("hoved", !t.kjorer);
